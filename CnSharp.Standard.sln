@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CnSharp.Core", "Core\CnSharp.Core.csproj", "{BFBECDED-0822-4F4F-9C63-69A3FF921BCB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CnSharp.Utilities.Excel", "Utilities\Excel\CnSharp.Utilities.Excel.csproj", "{585949B2-14C6-4443-A39B-5AF70A2028A7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BFBECDED-0822-4F4F-9C63-69A3FF921BCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFBECDED-0822-4F4F-9C63-69A3FF921BCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFBECDED-0822-4F4F-9C63-69A3FF921BCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFBECDED-0822-4F4F-9C63-69A3FF921BCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{585949B2-14C6-4443-A39B-5AF70A2028A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{585949B2-14C6-4443-A39B-5AF70A2028A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{585949B2-14C6-4443-A39B-5AF70A2028A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{585949B2-14C6-4443-A39B-5AF70A2028A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F5D04190-7DF2-4BD5-8C2A-313D835EC047}
+	EndGlobalSection
+EndGlobal

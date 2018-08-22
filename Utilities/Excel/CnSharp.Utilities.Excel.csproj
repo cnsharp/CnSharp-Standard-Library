@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <Version>2.0.0</Version>
+    <Product>CnSharp.Utilities.Excel</Product>
+    <Description>Excel helper based on NPOI on .NET core platform.</Description>
+    <PackageId>CnSharp.Utilities.Excel</PackageId>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <PackageReleaseNotes>initial version</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <Company>CnSharp.Utilities.Excel</Company>
+    <Authors>CnSharp.Utilities.Excel</Authors>
+    <PackageIconUrl>https://secure.gravatar.com/avatar/dff08c1ffd5fe20a93c2a606aa88e0d5?s=32&amp;r=g&amp;d=retro</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/cnsharp/CnSharp-Standard-Library</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/cnsharp/CnSharp-Standard-Library.git</RepositoryUrl>
+    <Copyright>Copyright © CnSharp 2018</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNetCore.NPOI" Version="1.2.0" />
+  </ItemGroup>
+
+</Project>
