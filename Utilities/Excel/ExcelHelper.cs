@@ -20,7 +20,7 @@ namespace CnSharp.Utilities.Excel
             {
                 foreach (DataTable table in ds.Tables)
                 {
-                    OuputDataTableToStream(table, ms);
+                    OutputDataTableToStream(table, ms);
                 }
                 ms.Flush();
                 return ms;
@@ -31,34 +31,34 @@ namespace CnSharp.Utilities.Excel
         {
             using (var ms = new MemoryStream())
             {
-                OuputDataTableToStream(table, ms);
+                OutputDataTableToStream(table, ms);
                 ms.Flush();
                 return ms;
             }
         }
 
-        public static void OuputDataSetToStream(DataSet ds, Stream stream, ExcelVersion version = ExcelVersion.V2007)
+        public static void OutputDataSetToStream(DataSet ds, Stream stream, ExcelVersion version = ExcelVersion.V2007)
         {
             var workbook = GetWorkbookInstance(version);
             var maxRowNumber = GetMaxRows(version);
 
             foreach (DataTable table in ds.Tables)
             {
-                OuputDataTableToStream(table, stream, workbook,maxRowNumber);
+                OutputDataTableToStream(table, stream, workbook,maxRowNumber);
             }
             workbook.Write(stream);
         }
 
-        public static void OuputDataTableToStream(DataTable table, Stream stream,
+        public static void OutputDataTableToStream(DataTable table, Stream stream,
             ExcelVersion version = ExcelVersion.V2007)
         {
             var workbook = GetWorkbookInstance(version);
             var maxRowNumber = GetMaxRows(version);
-            OuputDataTableToStream(table, stream, workbook, maxRowNumber);
+            OutputDataTableToStream(table, stream, workbook, maxRowNumber);
             workbook.Write(stream);
         }
         
-        private static void OuputDataTableToStream(DataTable sourceTable, Stream stream,IWorkbook workbook,int maxRowNumber)
+        private static void OutputDataTableToStream(DataTable sourceTable, Stream stream,IWorkbook workbook,int maxRowNumber)
         {
            
             var sheetName = sourceTable.TableName;
@@ -84,10 +84,6 @@ namespace CnSharp.Utilities.Excel
                     dataRow.CreateCell(column.Ordinal).SetCellValue(row[column].ToString());
                 ++rowIndex;
             }
-            //列宽自适应，只对英文和数字有效
-            for (var i = 0; i <= sourceTable.Columns.Count; ++i)
-                sheet.AutoSizeColumn(i);
-          
         }
 
         private static IWorkbook GetWorkbookInstance(ExcelVersion version,FileStream fileStream = null)
@@ -117,7 +113,7 @@ namespace CnSharp.Utilities.Excel
             {
                 foreach (DataTable table in ds.Tables)
                 {
-                    OuputDataTableToStream(table, sw, version);
+                    OutputDataTableToStream(table, sw, version);
                 }
             }
         }
@@ -128,7 +124,7 @@ namespace CnSharp.Utilities.Excel
             var version = GetExcelVersionByFileName(fileName);
             using (var sw = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
             {
-                    OuputDataTableToStream(table, sw, version);
+                    OutputDataTableToStream(table, sw, version);
             }
         }
 

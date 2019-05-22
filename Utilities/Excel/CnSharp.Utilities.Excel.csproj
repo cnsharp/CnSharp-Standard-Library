@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <Version>2.0.0</Version>
+    <AssemblyVersion>2.0.0.1</AssemblyVersion>
+    <Version>2.0.0.1</Version>
     <Product>CnSharp.Utilities.Excel</Product>
     <Description>Excel helper based on NPOI on .NET core platform.</Description>
     <PackageId>CnSharp.Utilities.Excel</PackageId>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageReleaseNotes>initial version</PackageReleaseNotes>
+    <PackageReleaseNotes>performance issue</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>CnSharp.Utilities.Excel</Company>
     <Authors>CnSharp.Utilities.Excel</Authors>
@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetCore.NPOI" Version="1.2.0" />
+    <PackageReference Include="DotNetCore.NPOI" Version="1.2.1" />
   </ItemGroup>
 
 </Project>
