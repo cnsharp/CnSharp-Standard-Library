@@ -1,21 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>CnSharp</RootNamespace>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
     <Product>CnSharp.Core</Product>
     <Description>CnSharp Core Lib</Description>
     <PackageId>CnSharp.Core</PackageId>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <PackageReleaseNotes>initial version</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageReleaseNotes>upgrade to netstandard2.1</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>CnSharp.Core</Company>
-    <Authors>CnSharp.Core</Authors>
+    <Authors>cnsharp.com</Authors>
     <PackageIconUrl>https://secure.gravatar.com/avatar/dff08c1ffd5fe20a93c2a606aa88e0d5?s=32&amp;r=g&amp;d=retro</PackageIconUrl>
     <RepositoryUrl>https://github.com/cnsharp/CnSharp-Standard-Library.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/cnsharp/CnSharp-Standard-Library</PackageProjectUrl>
-    <Copyright>Copyright © CnSharp 2018</Copyright>
+    <Copyright>Copyright © CnSharp 2018-2024</Copyright>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <Title>CnSharp Core Lib</Title>
   </PropertyGroup>
 
 </Project>

@@ -14,7 +14,7 @@ namespace CnSharp.Data.SerialNumber
        /// </summary>
         public string SequencePattern { get; set; }
         /// <summary>
-        /// Pattern of serial number which will be genrated,like '%wid%PO%yyyyMMdd%%seq5%',
+        /// Pattern of serial number which will be generated,like '%wid%PO%yyyyMMdd%%seq5%',
         /// and generating result like 'BJ01PO2024022500001'
         /// </summary>
         public string NumberPattern { get; set; }

@@ -1,10 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>CnSharp.Data.SerialNumber</AssemblyName>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
     <RootNamespace>CnSharp.Data.SerialNumber</RootNamespace>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <Title>CnSharp.Data.SerialNumber</Title>
+    <Authors>cnsharp.com</Authors>
+    <PackageIconUrl>https://secure.gravatar.com/avatar/dff08c1ffd5fe20a93c2a606aa88e0d5?s=32&amp;r=g&amp;d=retro</PackageIconUrl>
+    <RepositoryUrl>https://github.com/cnsharp/CnSharp-Standard-Library.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/cnsharp/CnSharp-Standard-Library</PackageProjectUrl>
+    <Copyright>Copyright © CnSharp 2018-2024</Copyright>
+    <Description>CnSharp SerialNumber Abstraction API</Description>
+    <PackageTags>sequence,serail number generator</PackageTags>
+    <PackageReleaseNotes>initial version</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
