@@ -10,6 +10,22 @@ namespace CnSharp.Data.SerialNumber
         private const string DatePattern = "^[y|M|d|H|m|s|fff]+$";
         private const string Separator = "%";
 
+        public static string GetSequenceName(string pattern,  Dictionary<string, object> context = null)
+        {
+            var name = pattern;
+            var placeholders = SplitPlaceholder(pattern);
+            foreach (var placeholder in placeholders)
+            {
+                var oldString = $"{Separator}{placeholder}{Separator}";
+                if (context != null && context.ContainsKey(placeholder))
+                {
+                    name = name.Replace(oldString, context[placeholder].ToString());
+                }
+            }
+
+            return name;
+        }
+
         public static string GetNumber(string pattern, long sequence, Dictionary<string,object> context = null)
         {
             var number = pattern;

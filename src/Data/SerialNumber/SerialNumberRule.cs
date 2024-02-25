@@ -4,11 +4,20 @@ namespace CnSharp.Data.SerialNumber
 {
     public class SerialNumberRule
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string Code { get; set; }
         public int StartValue { get; set; }
         public int Step { get; set; } = 1;
-        public string Pattern { get; set; }
+       /// <summary>
+       /// Pattern of sequence name,like '%wid%PO'
+       /// would be formatted and replaced %wid' by real value by context 
+       /// </summary>
+        public string SequencePattern { get; set; }
+        /// <summary>
+        /// Pattern of serial number which will be genrated,like '%wid%PO%yyyyMMdd%%seq5%',
+        /// and generating result like 'BJ01PO2024022500001'
+        /// </summary>
+        public string NumberPattern { get; set; }
         public DateTimeOffset DateCreated { get; set; } = DateTimeOffset.Now;
         public DateTimeOffset DateUpdated { get; set; }
     }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CnSharp.Data.UnitTest.Migrations
 {
     [DbContext(typeof(TestSequenceDbContext))]
-    [Migration("20200216022152_Init")]
+    [Migration("20240225142114_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,13 +19,14 @@ namespace CnSharp.Data.UnitTest.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("Relational:Sequence:.PO", "'PO', '', '1', '1', '', '', 'Int64', 'False'")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("CnSharp.Data.Sequence.SerialNumberRolling", b =>
+            modelBuilder.Entity("CnSharp.Data.SerialNumber.SerialNumberRolling", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(36)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Code")
                         .HasColumnType("varchar(32)")
@@ -34,8 +35,8 @@ namespace CnSharp.Data.UnitTest.Migrations
                     b.Property<long>("CurrentValue")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("D")
-                        .HasColumnType("int");
+                    b.Property<string>("Date")
+                        .HasColumnType("char(10)");
 
                     b.Property<DateTimeOffset>("DateCreated")
                         .ValueGeneratedOnAdd()
@@ -43,30 +44,26 @@ namespace CnSharp.Data.UnitTest.Migrations
                         .HasDefaultValueSql("SYSDATETIMEOFFSET()");
 
                     b.Property<DateTimeOffset>("DateUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
                         .HasDefaultValueSql("SYSDATETIMEOFFSET()");
-
-                    b.Property<int>("M")
-                        .HasColumnType("int");
 
                     b.Property<byte[]>("Version")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<int>("Y")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.ToTable("SerialNumberRollings");
+                    b.ToTable("SerialNumberRolling");
                 });
 
-            modelBuilder.Entity("CnSharp.Data.Sequence.SerialNumberRule", b =>
+            modelBuilder.Entity("CnSharp.Data.SerialNumber.SerialNumberRule", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(36)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Code")
                         .HasColumnType("varchar(32)")
@@ -78,16 +75,17 @@ namespace CnSharp.Data.UnitTest.Migrations
                         .HasDefaultValueSql("SYSDATETIMEOFFSET()");
 
                     b.Property<DateTimeOffset>("DateUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
                         .HasDefaultValueSql("SYSDATETIMEOFFSET()");
 
-                    b.Property<string>("Pattern")
+                    b.Property<string>("NumberPattern")
                         .HasColumnType("varchar(32)")
                         .HasMaxLength(32);
 
-                    b.Property<int>("RefreshCycle")
-                        .HasColumnType("int");
+                    b.Property<string>("SequencePattern")
+                        .HasColumnType("varchar(32)")
+                        .HasMaxLength(32);
 
                     b.Property<int>("StartValue")
                         .HasColumnType("int");
@@ -97,17 +95,17 @@ namespace CnSharp.Data.UnitTest.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SerialNumberRules");
+                    b.ToTable("SerialNumberRule");
 
                     b.HasData(
                         new
                         {
-                            Id = "9ade83a8-4687-44b7-bac1-8d552ec7dcf6",
+                            Id = new Guid("6fd7bf8a-ba9f-4f92-8605-9f692c698e3e"),
                             Code = "PO",
-                            DateCreated = new DateTimeOffset(new DateTime(2020, 2, 16, 10, 21, 50, 993, DateTimeKind.Unspecified).AddTicks(9694), new TimeSpan(0, 8, 0, 0, 0)),
+                            DateCreated = new DateTimeOffset(new DateTime(2024, 2, 25, 22, 21, 13, 947, DateTimeKind.Unspecified).AddTicks(5651), new TimeSpan(0, 8, 0, 0, 0)),
                             DateUpdated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Pattern = "%wid%PO%yyyyMMdd%%seq5%",
-                            RefreshCycle = 1,
+                            NumberPattern = "%wid%PO%yyyyMMdd%%06d%",
+                            SequencePattern = "%wid%PO",
                             StartValue = 1,
                             Step = 1
                         });

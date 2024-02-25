@@ -7,18 +7,13 @@ namespace CnSharp.Data.UnitTest.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateSequence(
-                name: "PO");
-
             migrationBuilder.CreateTable(
-                name: "SerialNumberRollings",
+                name: "SerialNumberRolling",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(36)", nullable: false),
+                    Id = table.Column<Guid>(nullable: false, defaultValueSql: "NEWID()"),
                     Code = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true),
-                    Y = table.Column<int>(nullable: false),
-                    M = table.Column<int>(nullable: false),
-                    D = table.Column<int>(nullable: false),
+                    Date = table.Column<string>(type: "char(10)", nullable: true),
                     CurrentValue = table.Column<long>(nullable: false),
                     Version = table.Column<byte[]>(rowVersion: true, nullable: true),
                     DateCreated = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()"),
@@ -26,43 +21,40 @@ namespace CnSharp.Data.UnitTest.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SerialNumberRollings", x => x.Id);
+                    table.PrimaryKey("PK_SerialNumberRolling", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "SerialNumberRules",
+                name: "SerialNumberRule",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(36)", nullable: false),
+                    Id = table.Column<Guid>(nullable: false, defaultValueSql: "NEWID()"),
                     Code = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true),
                     StartValue = table.Column<int>(nullable: false),
                     Step = table.Column<int>(nullable: false),
-                    Pattern = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true),
-                    RefreshCycle = table.Column<int>(nullable: false),
+                    SequencePattern = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true),
+                    NumberPattern = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: true),
                     DateCreated = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()"),
                     DateUpdated = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "SYSDATETIMEOFFSET()")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SerialNumberRules", x => x.Id);
+                    table.PrimaryKey("PK_SerialNumberRule", x => x.Id);
                 });
 
             migrationBuilder.InsertData(
-                table: "SerialNumberRules",
-                columns: new[] { "Id", "Code", "DateCreated", "Pattern", "RefreshCycle", "StartValue", "Step" },
-                values: new object[] { "9ade83a8-4687-44b7-bac1-8d552ec7dcf6", "PO", new DateTimeOffset(new DateTime(2020, 2, 16, 10, 21, 50, 993, DateTimeKind.Unspecified).AddTicks(9694), new TimeSpan(0, 8, 0, 0, 0)), "%wid%PO%yyyyMMdd%%seq5%", 1, 1, 1 });
+                table: "SerialNumberRule",
+                columns: new[] { "Id", "Code", "DateCreated", "NumberPattern", "SequencePattern", "StartValue", "Step" },
+                values: new object[] { new Guid("6fd7bf8a-ba9f-4f92-8605-9f692c698e3e"), "PO", new DateTimeOffset(new DateTime(2024, 2, 25, 22, 21, 13, 947, DateTimeKind.Unspecified).AddTicks(5651), new TimeSpan(0, 8, 0, 0, 0)), "%wid%PO%yyyyMMdd%%06d%", "%wid%PO", 1, 1 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "SerialNumberRollings");
+                name: "SerialNumberRolling");
 
             migrationBuilder.DropTable(
-                name: "SerialNumberRules");
-
-            migrationBuilder.DropSequence(
-                name: "PO");
+                name: "SerialNumberRule");
         }
     }
 }

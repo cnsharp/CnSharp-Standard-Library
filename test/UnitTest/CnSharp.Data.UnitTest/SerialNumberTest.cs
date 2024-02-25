@@ -20,14 +20,13 @@ namespace CnSharp.Data.UnitTest
             _testOutputHelper = testOutputHelper;
         }
 
-        ISerialNumberRuleRepository GetSerialNumberRuleRepo()
+        TestSequenceDbContext ConnectTestSequenceDb()
         {
             var builder = new DbContextOptionsBuilder<TestSequenceDbContext>();
             builder.UseSqlServer("Server=.;Database=CSF;Trusted_Connection=True;MultipleActiveResultSets=true");
-            var context = new TestSequenceDbContext(builder.Options);
-            //context.Database.Migrate();
-            return new SerialNumberRuleRepository(context);
+            return new TestSequenceDbContext(builder.Options);
         }
+
 
         [Fact]
         async Task TestGetNumber()
@@ -39,12 +38,15 @@ namespace CnSharp.Data.UnitTest
 
         private async Task<string> GetNumber()
         {
-            ISerialNumberGenerator gen = new SerialNumberGenerator(GetSerialNumberRuleRepo());
-            var num = await gen.Next("PO", new Dictionary<string, object>
+            using (var dbContext = ConnectTestSequenceDb()) 
             {
-                {"wid", "BJ01"}
-            });
-            return num;
+                ISerialNumberGenerator gen = new SerialNumberGenerator(new SerialNumberRuleRepository(dbContext), new SerialNumberRollingRepository(dbContext));
+                var num = await gen.Next("PO", new Dictionary<string, object>
+                {
+                    {"wid", "BJ01"}
+                });
+                return num;
+            }
         }
 
         [Fact]
@@ -54,7 +56,9 @@ namespace CnSharp.Data.UnitTest
             {
                 {"wid", "BJ01"}
             });
-            _testOutputHelper.WriteLine(sn);
+            var expected = $"BJ01PO{DateTime.Today.ToString("yyyyMMdd")}000001";
+           // _testOutputHelper.WriteLine(sn);
+           Assert.Equal(expected, sn);
         }
 
 
@@ -74,11 +78,12 @@ namespace CnSharp.Data.UnitTest
             {
                 new SerialNumberRule
                 {
-                    Id = Guid.NewGuid().ToString(),
+                    Id = Guid.NewGuid(),
                     Code = "PO",
                     StartValue = 1,
                     Step = 1,
-                    Pattern = "%wid%PO%yyyyMMdd%%seq5%"
+                    SequencePattern = "%wid%PO",
+                    NumberPattern = "%wid%PO%yyyyMMdd%%06d%"
                 }
             };
         }

@@ -17,13 +17,14 @@ namespace CnSharp.Data.UnitTest.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("Relational:Sequence:.PO", "'PO', '', '1', '1', '', '', 'Int64', 'False'")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("CnSharp.Data.SerialNumber.SerialNumberRolling", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(36)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Code")
                         .HasColumnType("varchar(32)")
@@ -33,7 +34,7 @@ namespace CnSharp.Data.UnitTest.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Date")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("char(10)");
 
                     b.Property<DateTimeOffset>("DateCreated")
                         .ValueGeneratedOnAdd()
@@ -41,7 +42,7 @@ namespace CnSharp.Data.UnitTest.Migrations
                         .HasDefaultValueSql("SYSDATETIMEOFFSET()");
 
                     b.Property<DateTimeOffset>("DateUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
                         .HasDefaultValueSql("SYSDATETIMEOFFSET()");
 
@@ -52,13 +53,15 @@ namespace CnSharp.Data.UnitTest.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SerialNumberRollings");
+                    b.ToTable("SerialNumberRolling");
                 });
 
             modelBuilder.Entity("CnSharp.Data.SerialNumber.SerialNumberRule", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(36)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Code")
                         .HasColumnType("varchar(32)")
@@ -70,11 +73,15 @@ namespace CnSharp.Data.UnitTest.Migrations
                         .HasDefaultValueSql("SYSDATETIMEOFFSET()");
 
                     b.Property<DateTimeOffset>("DateUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetimeoffset")
                         .HasDefaultValueSql("SYSDATETIMEOFFSET()");
 
-                    b.Property<string>("Pattern")
+                    b.Property<string>("NumberPattern")
+                        .HasColumnType("varchar(32)")
+                        .HasMaxLength(32);
+
+                    b.Property<string>("SequencePattern")
                         .HasColumnType("varchar(32)")
                         .HasMaxLength(32);
 
@@ -86,16 +93,17 @@ namespace CnSharp.Data.UnitTest.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SerialNumberRules");
+                    b.ToTable("SerialNumberRule");
 
                     b.HasData(
                         new
                         {
-                            Id = "8794f5dd-79ae-4e06-aa6c-d6a80bc78ea7",
+                            Id = new Guid("6fd7bf8a-ba9f-4f92-8605-9f692c698e3e"),
                             Code = "PO",
-                            DateCreated = new DateTimeOffset(new DateTime(2024, 2, 25, 16, 27, 55, 912, DateTimeKind.Unspecified).AddTicks(3820), new TimeSpan(0, 8, 0, 0, 0)),
+                            DateCreated = new DateTimeOffset(new DateTime(2024, 2, 25, 22, 21, 13, 947, DateTimeKind.Unspecified).AddTicks(5651), new TimeSpan(0, 8, 0, 0, 0)),
                             DateUpdated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
-                            Pattern = "%wid%PO%yyyyMMdd%%seq5%",
+                            NumberPattern = "%wid%PO%yyyyMMdd%%06d%",
+                            SequencePattern = "%wid%PO",
                             StartValue = 1,
                             Step = 1
                         });

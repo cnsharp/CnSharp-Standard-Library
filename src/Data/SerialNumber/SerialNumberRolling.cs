@@ -5,7 +5,7 @@ namespace CnSharp.Data.SerialNumber
 {
     public class SerialNumberRolling
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string Code { get; set; }
         public string Date { get; set; }
         public long CurrentValue { get; set; }

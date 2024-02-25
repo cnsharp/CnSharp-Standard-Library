@@ -9,7 +9,6 @@ namespace CnSharp.Data.SerialNumber
 
         Task Modify(SerialNumberRule rule);
 
-        Task<Tuple<string,long>> GetSequenceValue(string code);
+        Task<SerialNumberRule> Get(string code);
     }
-
 }
