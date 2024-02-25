@@ -41,7 +41,7 @@ namespace CnSharp.IO
 		}
 
 		/// <summary>
-		/// ¶ÁÎÄ±¾
+		/// è¯»æ–‡æœ¬
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
@@ -51,7 +51,7 @@ namespace CnSharp.IO
 		}
 
 		/// <summary>
-		/// ¶ÁÎÄ±¾
+		/// è¯»æ–‡æœ¬
 		/// </summary>
 		/// <param name="path"></param>
 		/// <param name="coding"></param>
@@ -62,7 +62,7 @@ namespace CnSharp.IO
 		}
 
 		/// <summary>
-		/// Ð´ÎÄ¼þ
+		/// å†™æ–‡ä»¶
 		/// </summary>
 		/// <param name="path"></param>
 		/// <param name="content"></param>
@@ -72,7 +72,7 @@ namespace CnSharp.IO
 		}
 
 		/// <summary>
-		/// Ð´ÎÄ±¾
+		/// å†™æ–‡æœ¬
 		/// </summary>
 		/// <param name="path"></param>
 		/// <param name="content"></param>

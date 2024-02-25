@@ -7,17 +7,17 @@ namespace CnSharp.IO
 	{
 		#region Constants and Fields
 
-		public const string BlackChars = @"/ \ < > * £¿";
+		public const string BlackChars = @"/ \ < > * ï¼Ÿ";
 
 		#endregion
 
 		#region Public Methods
 
 		/// <summary>
-		/// ¼ÆËã¾ø¶ÔÂ·¾¶
+		/// è®¡ç®—ç»å¯¹è·¯å¾„
 		/// </summary>
-		/// <param name="absoluteDir">¾ø¶ÔÄ¿Â¼</param>
-		/// <param name="relativeFile">Ïà¶ÔÎÄ¼ş</param>
+		/// <param name="absoluteDir">ç»å¯¹ç›®å½•</param>
+		/// <param name="relativeFile">ç›¸å¯¹æ–‡ä»¶</param>
 		/// <returns></returns>
 		/// <example>
 		/// @"D:\Windows\regedit.exe" = GetAbsolutePath(@"D:\Windows\Web\Wallpaper\", @"..\..\regedit.exe" );
@@ -101,12 +101,12 @@ namespace CnSharp.IO
 		}
 
 		/// <summary>
-		/// ¼ÆËãÏà¶ÔÂ·¾¶
-		/// ºóÕßÏà¶ÔÇ°ÕßµÄÂ·¾¶¡£
+		/// è®¡ç®—ç›¸å¯¹è·¯å¾„
+		/// åè€…ç›¸å¯¹å‰è€…çš„è·¯å¾„ã€‚
 		/// </summary>
-		/// <param name="mainDir">Ö÷Ä¿Â¼</param>
-		/// <param name="fullFilePath">ÎÄ¼şµÄ¾ø¶ÔÂ·¾¶</param>
-		/// <returns>fullFilePathÏà¶ÔÓÚmainDirµÄÂ·¾¶</returns>
+		/// <param name="mainDir">ä¸»ç›®å½•</param>
+		/// <param name="fullFilePath">æ–‡ä»¶çš„ç»å¯¹è·¯å¾„</param>
+		/// <returns>fullFilePathç›¸å¯¹äºmainDirçš„è·¯å¾„</returns>
 		/// <example>
 		/// @"..\..\regedit.exe" = GetRelativePath(@"D:\Windows\Web\Wallpaper\", @"D:\Windows\regedit.exe" );
 		/// </example>
@@ -148,7 +148,7 @@ namespace CnSharp.IO
 		}
 
 		/// <summary>
-		/// ¼ì²éÊÇ·ñºÏ·¨ÎÄ¼şÃû
+		/// æ£€æŸ¥æ˜¯å¦åˆæ³•æ–‡ä»¶å
 		/// </summary>
 		/// <param name="fileName"></param>
 		/// <returns></returns>
