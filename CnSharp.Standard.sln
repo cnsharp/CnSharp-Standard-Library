@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "util", "util", "{09AC4317-9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_tests", "_tests", "{03DEB1B5-13C1-4C7F-B99F-79782B4E98E0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CnSharp.Data.UnitTest", "test\UnitTest\CnbSharp.Data.UnitTest\CnSharp.Data.UnitTest.csproj", "{CC4276DB-417A-4488-A7CA-1B907A8BD12D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CnSharp.Data.UnitTest", "test\UnitTest\CnSharp.Data.UnitTest\CnSharp.Data.UnitTest.csproj", "{CC4276DB-417A-4488-A7CA-1B907A8BD12D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CnSharp.Data.SerialNumber", "src\Data\SerialNumber\CnSharp.Data.SerialNumber.csproj", "{11906891-F488-49FD-8C9E-D1B7B6C429AF}"
 EndProject
