@@ -47,6 +47,16 @@ namespace CnSharp.Data.UnitTest
             return num;
         }
 
+        [Fact]
+        void TestGenSn()
+        {
+            var sn = SerialNumberJoiner.GetNumber("%wid%PO%yyyyMMdd%%06d%", 1, new Dictionary<string, object>
+            {
+                {"wid", "BJ01"}
+            });
+            _testOutputHelper.WriteLine(sn);
+        }
+
 
         [Fact]
         async Task TestMultiThread()
@@ -66,7 +76,6 @@ namespace CnSharp.Data.UnitTest
                 {
                     Id = Guid.NewGuid().ToString(),
                     Code = "PO",
-                    RefreshCycle = RefreshCycle.Daily,
                     StartValue = 1,
                     Step = 1,
                     Pattern = "%wid%PO%yyyyMMdd%%seq5%"

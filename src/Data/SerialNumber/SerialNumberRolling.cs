@@ -7,9 +7,7 @@ namespace CnSharp.Data.SerialNumber
     {
         public string Id { get; set; }
         public string Code { get; set; }
-        public int Y { get; set; }
-        public int M { get; set; }
-        public int D { get; set; }
+        public string Date { get; set; }
         public long CurrentValue { get; set; }
         [Timestamp]
         public byte[] Version { get; set; }

@@ -9,7 +9,6 @@ namespace CnSharp.Data.SerialNumber
         public int StartValue { get; set; }
         public int Step { get; set; } = 1;
         public string Pattern { get; set; }
-        public RefreshCycle RefreshCycle { get; set; } = RefreshCycle.Daily;
         public DateTimeOffset DateCreated { get; set; } = DateTimeOffset.Now;
         public DateTimeOffset DateUpdated { get; set; }
     }

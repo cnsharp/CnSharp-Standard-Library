@@ -6,7 +6,7 @@ namespace CnSharp.Data.SerialNumber
 {
     public class SerialNumberJoiner
     {
-        private const string SeqPattern = @"seq\d+";
+        private const string SequencePattern = @"0\d+d";
         private const string DatePattern = "^[y|M|d|H|m|s|fff]+$";
         private const string Separator = "%";
 
@@ -58,13 +58,14 @@ namespace CnSharp.Data.SerialNumber
 
         private static string GetSequencePattern(string placeholder)
         {
-            var match = Regex.Match(placeholder, SeqPattern);
+            var match = Regex.Match(placeholder, SequencePattern);
             return match.Success ? match.Value : null;
         }
 
         private static string FormatSequence(long sequence, string pattern)
         {
-            var len = int.Parse(pattern.Substring(3));
+            string num = pattern.TrimStart('0').TrimEnd('d');
+            var len = int.Parse(num);
             return sequence.ToString().PadLeft(len, '0');
         }
 
