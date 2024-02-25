@@ -10,19 +10,19 @@ namespace CnSharp.Reflection
     public class ObjectLoader
     {
         /// <summary>
-        ///     * 从程序集生成对象
+        ///     从程序集生成对象
         /// </summary>
         /// <typeparam name="TObject">返回类型</typeparam>
         /// <returns></returns>
         public static TObject CreateObject<TObject>() where TObject : class
         {
-            var type = typeof (TObject);
+            var type = typeof(TObject);
 
             return CreateObject<TObject>(type.FullName);
         }
 
         /// <summary>
-        ///     * 根据类型名称生成对象
+        ///     根据类型名称生成对象
         /// </summary>
         /// <typeparam name="TObject">类型</typeparam>
         /// <param name="typeName">类型名称</param>
@@ -37,7 +37,7 @@ namespace CnSharp.Reflection
         }
 
         /// <summary>
-        ///     * 根据类型名称生成对象
+        ///     根据类型名称生成对象
         /// </summary>
         /// <typeparam name="TObject">类型</typeparam>
         /// <param name="typeName">类型名称</param>
@@ -49,14 +49,14 @@ namespace CnSharp.Reflection
 
             res =
                 GetAssemblyByType(typeName)
-                    .CreateInstance(typeName, true, BindingFlags.CreateInstance, null, parameters, null, null) as
+                        .CreateInstance(typeName, true, BindingFlags.CreateInstance, null, parameters, null, null) as
                     TObject;
 
             return res;
         }
 
         /// <summary>
-        ///     * 从程序集生成对象
+        ///     从程序集生成对象
         /// </summary>
         /// <typeparam name="TObject">返回类型</typeparam>
         /// <param name="typeName">反射类型名称</param>
@@ -72,7 +72,7 @@ namespace CnSharp.Reflection
         }
 
         /// <summary>
-        ///     * 根据类型获得程序集
+        ///     根据类型获得程序集
         /// </summary>
         /// <param name="typeName">类型名称</param>
         /// <returns></returns>
@@ -82,7 +82,7 @@ namespace CnSharp.Reflection
         }
 
         /// <summary>
-        ///     * 获得程序集
+        ///     获得程序集
         /// </summary>
         /// <param name="assemblyName">程序集名称</param>
         /// <returns></returns>
@@ -110,7 +110,7 @@ namespace CnSharp.Reflection
         }
 
         /// <summary>
-        ///     * 获得一个类型
+        ///     获得一个类型
         /// </summary>
         /// <param name="typeName">类型名称</param>
         /// <param name="assemblyName">类型所在程序集</param>

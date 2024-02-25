@@ -65,7 +65,7 @@ namespace CnSharp.IO
         /// </summary>
         /// <param name="filePath">待监视文件的绝对路径.</param>
         /// <returns>创建完成的 <see cref="FileWatcher" /> 类实例对象.</returns>
-        public static FileWatcher CreateOne(string filePath)
+        public static FileWatcher Instance(string filePath)
         {
             return new FileWatcher(filePath);
         }
