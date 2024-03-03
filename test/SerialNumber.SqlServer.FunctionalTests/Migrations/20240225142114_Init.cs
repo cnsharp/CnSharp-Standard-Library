@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CnSharp.Data.UnitTest.Migrations
+namespace CnSharp.Data.SerialNumber.SqlServer.FunctionalTests.Migrations
 {
     public partial class Init : Migration
     {
