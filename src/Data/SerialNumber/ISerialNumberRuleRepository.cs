@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 
 namespace CnSharp.Data.SerialNumber
 {
-    public interface ISerialNumberRuleRepository
+    public interface ISerialNumberRuleRepository<TId,TRule> 
+        where TRule : class, ISerialNumberRule<TId>
     {
-        Task Add(SerialNumberRule rule);
+        Task Add(TRule rule);
 
-        Task Modify(SerialNumberRule rule);
+        Task Modify(TRule rule);
 
-        Task<SerialNumberRule> Get(string code);
+        Task<TRule> Get(string code);
     }
 }

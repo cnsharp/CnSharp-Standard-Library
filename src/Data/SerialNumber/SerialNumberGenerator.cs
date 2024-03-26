@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CnSharp.Data.SerialNumber
 {
-    public class SerialNumberGenerator : ISerialNumberGenerator
+    public class SerialNumberGenerator<TId,TRule>  : ISerialNumberGenerator where TRule : class, ISerialNumberRule<TId>
     {
-        private readonly ISerialNumberRuleRepository _ruleRepository;
-        private readonly ISerialNumberRollingRepository _rollingRepository;
+        private readonly ISerialNumberRuleRepository<TId,TRule> _ruleRepository;
+        private readonly ISerialNumberRollingRepository<TId,TRule> _rollingRepository;
 
-        public SerialNumberGenerator(ISerialNumberRuleRepository ruleRepository, ISerialNumberRollingRepository rollingRepository)
+        public SerialNumberGenerator(ISerialNumberRuleRepository<TId,TRule> ruleRepository, ISerialNumberRollingRepository<TId,TRule> rollingRepository)
         {
             _ruleRepository = ruleRepository;
             _rollingRepository = rollingRepository;
@@ -23,6 +24,13 @@ namespace CnSharp.Data.SerialNumber
             }
             var number = await _rollingRepository.GetSequenceValue(rule, context);
             return SerialNumberJoiner.GetNumber(rule.NumberPattern, number, context);
+        }
+    }
+
+    public class SerialNumberGenerator : SerialNumberGenerator<Guid, SerialNumberRule>
+    {
+        public SerialNumberGenerator(ISerialNumberRuleRepository<Guid, SerialNumberRule> ruleRepository, ISerialNumberRollingRepository<Guid, SerialNumberRule> rollingRepository) : base(ruleRepository, rollingRepository)
+        {
         }
     }
 }

@@ -11,6 +11,7 @@
     <Copyright>Copyright © CnSharp 2018-2024</Copyright>
     <Description>CnSharp SerialNumber Generator Implemented by MS SQL Server</Description>
     <PackageReleaseNotes>initial version</PackageReleaseNotes>
+    <LangVersion>12</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 

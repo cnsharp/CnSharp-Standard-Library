@@ -2,49 +2,52 @@
 
 namespace CnSharp.Data.SerialNumber.MySql
 {
-    public class SerialNumberRollingRepository : ISerialNumberRollingRepository
+    public class
+        SerialNumberRollingRepository<TId, TRule, TRolling>(
+            ISequenceDbContext<TId, TRule, TRolling> dbContext)
+        : ISerialNumberRollingRepository<TId, TRule>
+        where TRule : class, ISerialNumberRule<TId>
+        where TRolling : class, ISerialNumberRolling<TId>, new()
     {
-        private readonly SequenceDbContext _dbContext;
-
-        public SerialNumberRollingRepository(SequenceDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
-
-        private const string CreateOrResetSequenceSql =
-            "IF NOT EXISTS (SELECT * FROM sys.sequences WHERE name = '{0}') CREATE SEQUENCE {0} START WITH {1} INCREMENT BY {2}; ELSE ALTER SEQUENCE [{0}] RESTART WITH {1};";
-
-        public async Task<long> GetSequenceValue(SerialNumberRule rule, Dictionary<string, object> context)
+        public async Task<long> GetSequenceValue(TRule rule, Dictionary<string, object> context)
         {
             var seqPattern = string.IsNullOrWhiteSpace(rule.SequencePattern) ? rule.Code : rule.SequencePattern;
             var sequenceName = SerialNumberJoiner.GetSequenceName(seqPattern, context);
             var date = DateTime.Today.ToString("yyyy-MM-dd");
             await using (var transaction =
-                         await _dbContext.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable))
+                         await dbContext.DbContext.Database.BeginTransactionAsync(System.Data.IsolationLevel
+                             .Serializable))
             {
-                var rolling = _dbContext.SerialNumberRollings.FromSqlInterpolated(
-                    $"select * from SerialNumberRolling where Code={sequenceName} and Date={date} for update"
+                var rolling = dbContext.SerialNumberRollings.FromSqlRaw(
+                    "select * from " + dbContext.GetTableName(typeof(TRolling)) +
+                    " where Code={0} and Date={1} for update",
+                    sequenceName,
+                    date
                 ).FirstOrDefault();
-                bool isNew = false;
                 if (rolling == null)
                 {
-                    rolling = new SerialNumberRolling
+                    rolling = new TRolling
                     {
                         Code = sequenceName,
                         Date = date,
                         CurrentValue = rule.StartValue
                     };
-                    await _dbContext.SerialNumberRollings.AddAsync(rolling);
+                    await dbContext.SerialNumberRollings.AddAsync(rolling);
                 }
                 else
                 {
                     rolling.CurrentValue += rule.Step;
                 }
-                
-                await _dbContext.SaveChangesAsync();
+
+                await dbContext.DbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
                 return rolling.CurrentValue;
             }
         }
     }
+
+    public class SerialNumberRollingRepository(
+        ISequenceDbContext<Guid, SerialNumberRule, SerialNumberRolling> dbContext)
+        : SerialNumberRollingRepository<Guid, SerialNumberRule, SerialNumberRolling>(dbContext);
+    
 }

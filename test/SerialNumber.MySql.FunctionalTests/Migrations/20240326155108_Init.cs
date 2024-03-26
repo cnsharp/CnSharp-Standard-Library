@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests.Migrations
 {
-    public partial class InitMySql : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,8 +15,6 @@ namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests.Migrations
                     Code = table.Column<string>(type: "varchar(32)", maxLength: 32, nullable: false),
                     Date = table.Column<string>(type: "char(10)", nullable: false),
                     CurrentValue = table.Column<long>(nullable: false),
-                    Version = table.Column<DateTime>(rowVersion: true, nullable: true)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
                     DateCreated = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP(6)"),
                     DateUpdated = table.Column<DateTimeOffset>(nullable: false, defaultValueSql: "CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)")
                 },
@@ -46,8 +43,8 @@ namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests.Migrations
 
             migrationBuilder.InsertData(
                 table: "SerialNumberRule",
-                columns: new[] { "Id", "Code", "DateCreated", "NumberPattern", "SequencePattern", "StartValue", "Step" },
-                values: new object[] { new Guid("a99f370d-b4a9-4e27-8004-6cb6cf8bf89a"), "PO", new DateTimeOffset(new DateTime(2024, 3, 3, 0, 0, 6, 132, DateTimeKind.Unspecified).AddTicks(400), new TimeSpan(0, 8, 0, 0, 0)), "%wid%PO%yyyyMMdd%%06d%", "%wid%PO", 1, 1 });
+                columns: new[] { "Id", "Code", "NumberPattern", "SequencePattern", "StartValue", "Step" },
+                values: new object[] { new Guid("a99f370d-b4a9-4e27-8004-6cb6cf8bf89a"), "PO", "%wid%PO%yyyyMMdd%%06d%", "%wid%PO", 1, 1 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

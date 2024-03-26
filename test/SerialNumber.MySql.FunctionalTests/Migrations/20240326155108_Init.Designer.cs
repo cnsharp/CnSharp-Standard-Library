@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests.Migrations
 {
     [DbContext(typeof(TestSequenceDbContext))]
-    [Migration("20240302160006_InitMySql")]
-    partial class InitMySql
+    [Migration("20240326155108_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,11 +46,6 @@ namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
-
-                    b.Property<DateTime?>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("timestamp(6)");
 
                     b.HasKey("Id");
 
@@ -102,7 +97,7 @@ namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests.Migrations
                         {
                             Id = new Guid("a99f370d-b4a9-4e27-8004-6cb6cf8bf89a"),
                             Code = "PO",
-                            DateCreated = new DateTimeOffset(new DateTime(2024, 3, 3, 0, 0, 6, 132, DateTimeKind.Unspecified).AddTicks(400), new TimeSpan(0, 8, 0, 0, 0)),
+                            DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             DateUpdated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             NumberPattern = "%wid%PO%yyyyMMdd%%06d%",
                             SequencePattern = "%wid%PO",

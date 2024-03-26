@@ -19,7 +19,7 @@ namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests.Migrations
 
             modelBuilder.Entity("CnSharp.Data.SerialNumber.SerialNumberRolling", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -45,11 +45,6 @@ namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests.Migrations
                         .HasColumnType("datetime(6)")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6)");
 
-                    b.Property<DateTime?>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("timestamp(6)");
-
                     b.HasKey("Id");
 
                     b.ToTable("SerialNumberRolling");
@@ -57,7 +52,7 @@ namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests.Migrations
 
             modelBuilder.Entity("CnSharp.Data.SerialNumber.SerialNumberRule", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
@@ -100,7 +95,7 @@ namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests.Migrations
                         {
                             Id = new Guid("a99f370d-b4a9-4e27-8004-6cb6cf8bf89a"),
                             Code = "PO",
-                            DateCreated = new DateTimeOffset(new DateTime(2024, 3, 3, 0, 0, 6, 132, DateTimeKind.Unspecified).AddTicks(400), new TimeSpan(0, 8, 0, 0, 0)),
+                            DateCreated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             DateUpdated = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             NumberPattern = "%wid%PO%yyyyMMdd%%06d%",
                             SequencePattern = "%wid%PO",

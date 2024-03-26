@@ -4,15 +4,8 @@ using Xunit.Abstractions;
 
 namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests
 {
-    public class SerialNumberTest
+    public class SerialNumberTest(ITestOutputHelper testOutputHelper)
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public SerialNumberTest(ITestOutputHelper testOutputHelper)
-        {
-            _testOutputHelper = testOutputHelper;
-        }
-
         TestSequenceDbContext ConnectTestSequenceDb()
         {
             var builder = new DbContextOptionsBuilder<TestSequenceDbContext>();
@@ -25,7 +18,7 @@ namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests
         async Task TestGetNumber()
         {
             var num = await GetNumber();
-            _testOutputHelper.WriteLine(num);
+            testOutputHelper.WriteLine(num);
             Assert.NotNull(num);
         }
 
@@ -33,7 +26,9 @@ namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests
         {
             using (var dbContext = ConnectTestSequenceDb()) 
             {
-                ISerialNumberGenerator gen = new SerialNumberGenerator(new SerialNumberRuleRepository(dbContext), new SerialNumberRollingRepository(dbContext));
+                ISerialNumberGenerator gen = new SerialNumberGenerator(
+                    new SerialNumberRuleRepository(dbContext), 
+                    new SerialNumberRollingRepository(dbContext));
                 var num = await gen.Next("PO", new Dictionary<string, object>
                 {
                     {"wid", "BJ01"}
@@ -46,7 +41,7 @@ namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests
         async Task TestMultiThread()
         {
             var tasks = Enumerable.Range(1, 50).Select(_ => GetNumber());
-            tasks.AsParallel().ForAll(task => _testOutputHelper.WriteLine(task.Result));
+            tasks.AsParallel().ForAll(task => testOutputHelper.WriteLine(task.Result));
         }
     }
 
@@ -54,18 +49,19 @@ namespace CnSharp.Data.SerialNumber.MySql.FunctionalTests
     {
         public TestSequenceDbContext(DbContextOptions options) : base(options)
         {
-            base.SeedData = new List<SerialNumberRule>
-            {
+            SeedData =
+            [
                 new SerialNumberRule
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("a99f370d-b4a9-4e27-8004-6cb6cf8bf89a"),
                     Code = "PO",
                     StartValue = 1,
                     Step = 1,
                     SequencePattern = "%wid%PO",
-                    NumberPattern = "%wid%PO%yyyyMMdd%%06d%"
+                    NumberPattern = "%wid%PO%yyyyMMdd%%06d%",
+                    DateCreated = DateTimeOffset.MinValue
                 }
-            };
+            ];
         }
     }
 
