@@ -4,7 +4,7 @@ using System.Threading;
 namespace CnSharp.Contexts
 {
     /// <summary>
-    /// 共享数据上下文范围
+    /// Shared data context scope
     /// </summary>
     public class DataContextScope : IDisposable
     {
@@ -17,9 +17,9 @@ namespace CnSharp.Contexts
         #region Entrance
 
         /// <summary>
-        /// 初始化新建一个 <see cref="DataContextScope"/> 类的实例对象
+        /// Initializes a new instance of the <see cref="DataContextScope"/> class
         /// </summary>
-        /// <param name="contextOption">共享数据上下文的配置信息</param>
+        /// <param name="contextOption">Shared data context configuration information</param>
         public DataContextScope(DataContextOption contextOption = DataContextOption.Required)
         {
             switch (contextOption)
@@ -39,9 +39,9 @@ namespace CnSharp.Contexts
         }
 
         /// <summary>
-        /// 初始化新建一个 <see cref="DataContextScope"/> 类的实例对象
+        /// Initializes a new instance of the <see cref="DataContextScope"/> class
         /// </summary>
-        /// <param name="mirrorContext">一个共享数据上下文的某时刻镜像</param>
+        /// <param name="mirrorContext">A snapshot of a shared data context at a certain point in time</param>
         public DataContextScope(MirrorContext mirrorContext)
         {
             if (mirrorContext.OriginalThread == Thread.CurrentThread)
@@ -53,16 +53,16 @@ namespace CnSharp.Contexts
 
         #endregion Entrance
 
-        #region IDisposable 成员
+        #region IDisposable Members
 
         /// <summary>
-        /// 执行与释放或重置非托管资源相关的应用程序定义的任务
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources
         /// </summary>
         public void Dispose()
         {
             DataContext.Current = _originalContext;
         }
 
-        #endregion IDisposable 成员
+        #endregion IDisposable Members
     }
 }

@@ -1,11 +1,11 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace CnSharp.Security
 {
     /// <summary>
-    /// MD5 加密算法帮助类
+    /// Helper class for MD5 encryption algorithm
     /// </summary>
     public static class MD5Helper
     {
@@ -18,10 +18,10 @@ namespace CnSharp.Security
         #region Entrance
 
         /// <summary>
-        /// 使用 MD5 加密算法加密数据。
+        /// Encrypts the input data using the MD5 algorithm.
         /// </summary>
-        /// <param name="input">待加密的原始数据。</param>
-        /// <returns>MD5 算法加密后的数据。</returns>
+        /// <param name="input">The data to be encrypted.</param>
+        /// <returns>The encrypted data using MD5.</returns>
         public static string MD5(this string input)
         {
             var data = Encoding.Default.GetBytes(input);

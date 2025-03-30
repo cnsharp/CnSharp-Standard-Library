@@ -1,22 +1,22 @@
 ﻿namespace CnSharp.Contexts
 {
     /// <summary>
-    /// 共享数据上下文配置信息
+    /// Shared data context configuration information
     /// </summary>
     public enum DataContextOption
     {
         /// <summary>
-        /// 相同线程上，外层的 DataContext 直接被内层使用
+        /// On the same thread, the outer DataContext is directly used by the inner layer
         /// </summary>
         Required,
 
         /// <summary>
-        /// 相同线程上，内层每次都会创建一个全新的 DataContext
+        /// On the same thread, a new DataContext is created each time for the inner layer
         /// </summary>
         RequiresNew,
 
         /// <summary>
-        /// 相同线程上，外层的 DataContextOption 在内层中使被屏蔽掉，内层的当前 DataContextOption 不存在
+        /// On the same thread, the outer DataContextOption is suppressed in the inner layer, and the current DataContextOption does not exist in the inner layer
         /// </summary>
         Suppress
     }

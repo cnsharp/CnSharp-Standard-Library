@@ -36,11 +36,13 @@ namespace CnSharp.IO
                 string[] info = filePath.Split(',');
                 if (info.Length == 4)
                 {
-                    gzf = new GZippedFile();
-                    gzf.Index = Convert.ToInt32(info[0]);
-                    gzf.RelativePath = info[1].Replace("/", "\\");
-                    gzf.ModifiedDate = Convert.ToDateTime(info[2]);
-                    gzf.Length = Convert.ToInt32(info[3]);
+                    gzf = new GZippedFile
+                    {
+                        Index = Convert.ToInt32(info[0]),
+                        RelativePath = info[1].Replace("/", "\\"),
+                        ModifiedDate = Convert.ToDateTime(info[2]),
+                        Length = Convert.ToInt32(info[3])
+                    };
                 }
             }
 

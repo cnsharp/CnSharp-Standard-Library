@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
 namespace CnSharp.Contexts
 {
     /// <summary>
-    /// 数据上下文镜像
+    /// Data context mirror
     /// </summary>
     [Serializable]
     public class MirrorContext : DataContext
@@ -13,7 +13,7 @@ namespace CnSharp.Contexts
         #region Business Properties
 
         /// <summary>
-        /// 获取保存镜像时，系统的线程信息
+        /// Gets the thread information of the system when saving the mirror
         /// </summary>
         public Thread OriginalThread { get; private set; }
 
@@ -22,9 +22,9 @@ namespace CnSharp.Contexts
         #region Entrance
 
         /// <summary>
-        /// 初始化新建一个 <see cref="MirrorContext"/> 类的实例对象
+        /// Initializes a new instance of the <see cref="MirrorContext"/> class
         /// </summary>
-        /// <param name="context">一个共享数据上下文的实例对象</param>
+        /// <param name="context">An instance of a shared data context</param>
         public MirrorContext(DataContext context)
         {
             OriginalThread = Thread.CurrentThread;

@@ -5,14 +5,14 @@ using System.Linq.Expressions;
 namespace CnSharp.Expressions
 {
     /// <summary>
-    /// 表达式树查询附加器
+    /// Expression tree query attacher
     /// </summary>
     public class ExpressionAttacher
     {
         #region Public Constructors
 
         /// <summary>
-        /// 初始化创建一个 <see cref="ExpressionAttacher"/> 类的实例对象。
+        /// Initializes a new instance of the <see cref="ExpressionAttacher"/> class.
         /// </summary>
         public ExpressionAttacher()
         {
@@ -23,7 +23,7 @@ namespace CnSharp.Expressions
         #region Public Properties
 
         /// <summary>
-        /// 获取后设置检索数据源。
+        /// Gets or sets the data source for retrieval.
         /// </summary>
         public IQueryable DataSource { get; set; }
 
@@ -32,14 +32,14 @@ namespace CnSharp.Expressions
         #region Public Methods
 
         /// <summary>
-        /// 为数据源附加查询。
+        /// Attaches a query to the data source.
         /// </summary>
-        /// <param name="originalElementType">附加查询的原始元素类型。</param>
-        /// <param name="targetExpr">附加查询表达式树。</param>
-        /// <returns>一个附加完成的查询分析器接口。</returns>
+        /// <param name="originalElementType">The original element type of the attached query.</param>
+        /// <param name="targetExpr">The expression tree of the attached query.</param>
+        /// <returns>An interface for the completed query parser.</returns>
         public IQueryableParser Attach(Type originalElementType, Expression targetExpr)
         {
-            var builder = new ExpresionRewriteBuilder(originalElementType, DataSource.ElementType);
+            var builder = new ExpressionRewriteBuilder(originalElementType, DataSource.ElementType);
             var parser = new QueryableParser { DataSource = DataSource, };
             parser.Converter = p =>
             {

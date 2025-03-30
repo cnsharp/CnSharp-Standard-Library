@@ -8,30 +8,30 @@ using System.Reflection;
 namespace CnSharp.Expressions
 {
     /// <summary>
-    /// Lambda 表达式树转换查询类
+    /// Lambda expression tree conversion query class
     /// </summary>
     public static class ConvertQueryable
     {
         /// <summary>
-        /// 创建一个转换查询的数据源。
+        /// Create a data source for a conversion query.
         /// </summary>
-        /// <typeparam name="T">显式查询类型</typeparam>
-        /// <param name="query">一个真实类型的查询接口获取方法。</param>
-        /// <returns>一个显式查询的数据源。</returns>
+        /// <typeparam name="T">Explicit query type</typeparam>
+        /// <param name="query">A method to get a query interface of the real type.</param>
+        /// <returns>A data source for an explicit query.</returns>
         public static IQueryable<T> CreateQuery<T>(Func<IQueryable> query)
         {
             if (query == null)
-                throw new ArgumentNullException("query");
+                throw new ArgumentNullException(nameof(query));
 
             return new ConvertQueryable<T> { DataSource = query };
         }
 
         /// <summary>
-        /// 向原始查询附加额外的查询条件。
+        /// Attach additional query conditions to the original query.
         /// </summary>
-        /// <param name="source">一个原始查询的数据源。</param>
-        /// <param name="query">需要附加的查询条件：ConvertQueryable 类型。</param>
-        /// <returns>附加完毕查询的数据源。</returns>
+        /// <param name="source">A data source of the original query.</param>
+        /// <param name="query">The query conditions to be attached: ConvertQueryable type.</param>
+        /// <returns>The data source after attaching the query conditions.</returns>
         public static IQueryable Attach(this IQueryable source, IQueryable query)
         {
             if (!(query is IElementTypeProvider))
@@ -45,12 +45,12 @@ namespace CnSharp.Expressions
         }
 
         /// <summary>
-        /// 向原始查询附加额外的查询条件。
+        /// Attach additional query conditions to the original query.
         /// </summary>
-        /// <typeparam name="TOriginalElementType">query 查询的原始元素类型</typeparam>
-        /// <param name="source">一个原始查询的数据源。</param>
-        /// <param name="query">需要附加的查询条件。</param>
-        /// <returns>附加完毕查询的数据源。</returns>
+        /// <typeparam name="TOriginalElementType">The original element type of the query</typeparam>
+        /// <param name="source">A data source of the original query.</param>
+        /// <param name="query">The query conditions to be attached.</param>
+        /// <returns>The data source after attaching the query conditions.</returns>
         public static IQueryable Attach<TOriginalElementType>(this IQueryable source, IQueryable query)
         {
             var attacher = new ExpressionAttacher();
@@ -61,77 +61,77 @@ namespace CnSharp.Expressions
         }
 
         /// <summary>
-        /// 根据一个转换查询的数据源获取符合条件的第一个元素，没有符合的元素时将返回 <c>null</c> 。
+        /// Get the first element that meets the conditions from a conversion query data source, or return <c>null</c> if no element meets the conditions.
         /// </summary>
-        /// <param name="source">一个转换查询的数据源接口。</param>
-        /// <returns>符合条件的第一个元素。</returns>
+        /// <param name="source">An interface for a conversion query data source.</param>
+        /// <returns>The first element that meets the conditions.</returns>
         public static object FirstOrDefault(IQueryable source)
         {
             return Execute(source, MethodInfo.GetCurrentMethod());
         }
 
         /// <summary>
-        /// 根据一个转换查询的数据源获取符合条件元素的数量。
+        /// Get the number of elements that meet the conditions from a conversion query data source.
         /// </summary>
-        /// <param name="source">一个转换查询的数据源接口。</param>
-        /// <returns>符合条件元素的数量。</returns>
+        /// <param name="source">An interface for a conversion query data source.</param>
+        /// <returns>The number of elements that meet the conditions.</returns>
         public static int Count(IQueryable source)
         {
             return (int)Execute(source, MethodInfo.GetCurrentMethod());
         }
 
         /// <summary>
-        /// 根据一个转换查询的数据源获取符合条件元素的数量。
+        /// Get the number of elements that meet the conditions from a conversion query data source.
         /// </summary>
-        /// <param name="source">一个转换查询的数据源接口。</param>
-        /// <returns>符合条件元素的数量。</returns>
+        /// <param name="source">An interface for a conversion query data source.</param>
+        /// <returns>The number of elements that meet the conditions.</returns>
         public static long LongCount(IQueryable source)
         {
             return (long)Execute(source, MethodInfo.GetCurrentMethod());
         }
 
         /// <summary>
-        /// 根据一个转换查询的数据源获取符合条件元素的是否存在：<c>true</c> 表示存在。
+        /// Determine whether there are elements that meet the conditions from a conversion query data source: <c>true</c> indicates existence.
         /// </summary>
-        /// <param name="source">一个转换查询的数据源接口。</param>
-        /// <returns><c>true</c> 表示存在符合条件的元素；否则返回 <c>false</c> 。</returns>
+        /// <param name="source">An interface for a conversion query data source.</param>
+        /// <returns><c>true</c> indicates that there are elements that meet the conditions; otherwise, <c>false</c>.</returns>
         public static bool Any(IQueryable source)
         {
             return (bool)Execute(source, MethodInfo.GetCurrentMethod());
         }
 
         /// <summary>
-        /// 根据一个转换查询的数据源获取符合条件的元素数组。
+        /// Get an array of elements that meet the conditions from a conversion query data source.
         /// </summary>
-        /// <param name="source">一个转换查询的数据源接口。</param>
-        /// <returns>符合条件的元素数组。</returns>
+        /// <param name="source">An interface for a conversion query data source.</param>
+        /// <returns>An array of elements that meet the conditions.</returns>
         public static object[] ToArray(IQueryable source)
         {
             return (Execute(source, MethodInfo.GetCurrentMethod()) as IEnumerable).OfType<object>().ToArray();
         }
 
         /// <summary>
-        /// 转换 Lambda 表达式中的第一个参数为 {T} 类型。
+        /// Convert the first parameter in the Lambda expression to type {T}.
         /// </summary>
-        /// <typeparam name="T">需要转换的目标元素类型。</typeparam>
-        /// <param name="lambda">需要转换的原始表达式树。</param>
-        /// <returns>转换完成的目标表达式树。</returns>
+        /// <typeparam name="T">The target element type to be converted.</typeparam>
+        /// <param name="lambda">The original expression tree to be converted.</param>
+        /// <returns>The target expression tree after conversion.</returns>
         public static Expression<Func<T, bool>> ChangeParameter<T>(this LambdaExpression lambda)
         {
             return ChangeParameter(lambda, typeof(T)) as Expression<Func<T, bool>>;
         }
 
         /// <summary>
-        /// 转换 Lambda 表达式中的第一个参数为 <param name="targetElementType"/> 类型。
+        /// Convert the first parameter in the Lambda expression to type <param name="targetElementType"/>.
         /// </summary>
-        /// <param name="lambda">需要转换的原始表达式树。</param>
-        /// <param name="targetElementType">需要转换的目标元素类型。</param>
-        /// <returns>转换完成的目标表达式树。</returns>
+        /// <param name="lambda">The original expression tree to be converted.</param>
+        /// <param name="targetElementType">The target element type to be converted.</param>
+        /// <returns>The target expression tree after conversion.</returns>
         public static LambdaExpression ChangeParameter(this LambdaExpression lambda, Type targetElementType)
         {
             var originalParameter = lambda.Parameters[0];
             var parameterExpr = Expression.Parameter(targetElementType, originalParameter.Name);
-            var builder = new ExpresionRewriteBuilder(originalParameter.Type, targetElementType);
+            var builder = new ExpressionRewriteBuilder(originalParameter.Type, targetElementType);
 
             var value = builder.Build(lambda.Body, expr =>
             {
@@ -179,7 +179,7 @@ namespace CnSharp.Expressions
         public ConvertQueryable(Expression expression, Type originalElementType)
         {
             if (expression == null)
-                throw new ArgumentNullException(string.Format("[RestQueryable<{0}>].[ctor].expression", typeof(T).Name), "查询表达式不能为 null 。");
+                throw new ArgumentNullException(nameof(expression), "Query expression cannot be null.");
 
             Expression = expression;
             OriginalElementType = originalElementType;
@@ -191,7 +191,7 @@ namespace CnSharp.Expressions
             }, true);
         }
 
-        #region IEnumerable<T> 成员
+        #region IEnumerable<T> members
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -199,30 +199,27 @@ namespace CnSharp.Expressions
             return (enumerable ?? new T[0]).GetEnumerator();
         }
 
-        #endregion IEnumerable<T> 成员
+        #endregion IEnumerable<T> members
 
-        #region IEnumerable 成员
+        #region IEnumerable members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return Provider.Execute<IEnumerable>(Expression).GetEnumerator();
         }
 
-        #endregion IEnumerable 成员
+        #endregion IEnumerable members
 
-        #region IQueryable 成员
+        #region IQueryable members
 
-        public Type ElementType
-        {
-            get { return typeof(T); }
-        }
+        public Type ElementType => typeof(T);
 
         public Expression Expression { get; private set; }
 
-        public IQueryProvider Provider { get { return _provider.Value; } }
+        public IQueryProvider Provider => _provider.Value;
 
-        #endregion IQueryable 成员
+        #endregion IQueryable members
 
-        private Lazy<IQueryProvider> _provider = null;
+        private Lazy<IQueryProvider> _provider;
     }
 }

@@ -6,7 +6,7 @@ using System.Threading;
 namespace CnSharp.IO
 {
     /// <summary>
-    /// 文件监视类
+    /// File watcher class
     /// </summary>
     [DebuggerStepThrough]
     [DebuggerDisplay("FilePath = {FilePath}")]
@@ -24,12 +24,12 @@ namespace CnSharp.IO
         #region Business Properties
 
         /// <summary>
-        /// 获取一个值，通过该值指示是否可以引发文件内容改变事件：<c>true</c> 表示可以引发改变事件，默认值为 <c>true</c> 。
+        /// Gets a value indicating whether the file content changed event can be raised: <c>true</c> means the event can be raised, the default value is <c>true</c>.
         /// </summary>
         public bool CanRaiseChangedEvent { get; set; }
 
         /// <summary>
-        /// 获取监视文件的绝对路径.
+        /// Gets the absolute path of the monitored file.
         /// </summary>
         public string FilePath { get; private set; }
 
@@ -38,15 +38,15 @@ namespace CnSharp.IO
         #region Entrance
 
         /// <summary>
-        /// 初始化新建一个 <see cref="FileWatcher" /> 类的实例对象.
+        /// Initializes a new instance of the <see cref="FileWatcher" /> class.
         /// </summary>
-        /// <param name="filePath">待监视文件的绝对路径.</param>
-        /// <exception cref="System.IO.FileNotFoundException">没有找到待监视的文件！</exception>
+        /// <param name="filePath">The absolute path of the file to be monitored.</param>
+        /// <exception cref="System.IO.FileNotFoundException">The file to be monitored was not found!</exception>
         public FileWatcher(string filePath)
             : this()
         {
             if (!File.Exists(filePath))
-                throw new FileNotFoundException("没有找到待监视的文件！", filePath);
+                throw new FileNotFoundException("The file to be monitored was not found!", filePath);
 
             FilePath = filePath;
             InitFileSystemWatcher();
@@ -54,17 +54,17 @@ namespace CnSharp.IO
         }
 
         /// <summary>
-        /// 初始化新建一个 <see cref="FileWatcher" /> 类的实例对象.
+        /// Initializes a new instance of the <see cref="FileWatcher" /> class.
         /// </summary>
         public FileWatcher()
         {
         }
 
         /// <summary>
-        /// 创建一个 <see cref="FileWatcher" /> 类的实例对象.
+        /// Creates an instance of the <see cref="FileWatcher" /> class.
         /// </summary>
-        /// <param name="filePath">待监视文件的绝对路径.</param>
-        /// <returns>创建完成的 <see cref="FileWatcher" /> 类实例对象.</returns>
+        /// <param name="filePath">The absolute path of the file to be monitored.</param>
+        /// <returns>The created instance of the <see cref="FileWatcher" /> class.</returns>
         public static FileWatcher Instance(string filePath)
         {
             return new FileWatcher(filePath);
@@ -75,12 +75,12 @@ namespace CnSharp.IO
         #region Events
 
         /// <summary>
-        /// 在原始 XML 文件内容发生改变的时候发生
+        /// Occurs when the content of the original  file changes.
         /// </summary>
         public event Action OnFileChanged;
 
         /// <summary>
-        /// 引发 OnXmlFileChanged 事件
+        /// Raises the OnFileChanged event.
         /// </summary>
         public void RaiseChangedEvent()
         {
@@ -99,7 +99,8 @@ namespace CnSharp.IO
             _fsw = new FileSystemWatcher(Path.GetDirectoryName(FilePath), Path.GetFileName(FilePath))
             {
                 IncludeSubdirectories = false,
-                NotifyFilter = NotifyFilters.Attributes | NotifyFilters.Size | NotifyFilters.LastWrite | NotifyFilters.Security,
+                NotifyFilter = NotifyFilters.Attributes | NotifyFilters.Size | NotifyFilters.LastWrite |
+                               NotifyFilters.Security,
             };
 
             _fsw.Changed += (sender, e) =>

@@ -2,21 +2,30 @@
 
   <PropertyGroup>
     <RootNamespace>CnSharp</RootNamespace>
-    <Version>2.1.0</Version>
+    <Version>2.1.1</Version>
     <Product>CnSharp.Core</Product>
     <Description>CnSharp Core Lib</Description>
     <PackageId>CnSharp.Core</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>upgrade to netstandard2.1</PackageReleaseNotes>
+    <PackageReleaseNotes>cleanup</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <Company>CnSharp.Core</Company>
     <Authors>cnsharp.com</Authors>
-    <PackageIconUrl>https://secure.gravatar.com/avatar/dff08c1ffd5fe20a93c2a606aa88e0d5?s=32&amp;r=g&amp;d=retro</PackageIconUrl>
     <RepositoryUrl>https://github.com/cnsharp/CnSharp-Standard-Library.git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/cnsharp/CnSharp-Standard-Library</PackageProjectUrl>
-    <Copyright>Copyright © CnSharp 2018-2024</Copyright>
+    <Copyright>Copyright © CnSharp 2018-2025</Copyright>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <Title>CnSharp Core Lib</Title>
+    <PackageIcon>CnSharp-icon-256x256.png</PackageIcon>
+    <PackageTags>C#,.NET Standard</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\assets\CnSharp-icon-256x256.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+      <Link>CnSharp-icon-256x256.png</Link>
+    </None>
+  </ItemGroup>
 
 </Project>

@@ -4,13 +4,16 @@ using System.Collections.Generic;
 namespace CnSharp.Contexts
 {
     /// <summary>
-    /// 共享数据上下文
+    /// Represents a shared data context.
     /// </summary>
     [Serializable]
     public class DataContext
     {
         #region Private Fields
 
+        /// <summary>
+        /// Holds the current instance of the DataContext for the current thread.
+        /// </summary>
         [ThreadStatic]
         private static DataContext _current;
 
@@ -19,7 +22,7 @@ namespace CnSharp.Contexts
         #region Business Properties
 
         /// <summary>
-        /// 获取当前共享数据上下文的实例对象
+        /// Gets or sets the current instance of the shared data context.
         /// </summary>
         public static DataContext Current
         {
@@ -28,7 +31,7 @@ namespace CnSharp.Contexts
         }
 
         /// <summary>
-        /// 获取共享数据上下文中包含的数据集合
+        /// Gets the collection of data contained in the shared data context.
         /// </summary>
         public IDictionary<string, object> Items { get; internal set; }
 
@@ -36,6 +39,9 @@ namespace CnSharp.Contexts
 
         #region Entrance
 
+        /// <summary>
+        /// Initializes a new instance of the DataContext class.
+        /// </summary>
         internal DataContext()
         {
             this.Items = new Dictionary<string, object>();
@@ -46,21 +52,21 @@ namespace CnSharp.Contexts
         #region Business Methods
 
         /// <summary>
-        /// 获取当前共享数据上下文的一个深层拷贝
+        /// Creates a deep copy of the current shared data context.
         /// </summary>
-        /// <returns></returns>
-        public MirrorContext DepedentClone()
+        /// <returns>A new instance of MirrorContext that is a deep copy of the current context.</returns>
+        public MirrorContext Clone()
         {
             return new MirrorContext(this);
         }
 
         /// <summary>
-        /// 根据指定的键获取保存在上下文中的数据
+        /// Gets the data stored in the context by the specified key.
         /// </summary>
-        /// <typeparam name="T">目标数据类型</typeparam>
-        /// <param name="key">用于获取目标数据的键</param>
-        /// <param name="defaultValue">获取目标数据失败后的返回值</param>
-        /// <returns>指定的键获取保存在上下文中的数据</returns>
+        /// <typeparam name="T">The type of the target data.</typeparam>
+        /// <param name="key">The key used to retrieve the target data.</param>
+        /// <param name="defaultValue">The value to return if the target data is not found.</param>
+        /// <returns>The data stored in the context by the specified key.</returns>
         public T GetValue<T>(string key, T defaultValue = default(T))
         {
             object value;
@@ -72,10 +78,10 @@ namespace CnSharp.Contexts
         }
 
         /// <summary>
-        /// 添加或更新指定键在共享数据上下文中的值
+        /// Adds or updates the value for the specified key in the shared data context.
         /// </summary>
-        /// <param name="key">用于设置目标数据的键</param>
-        /// <param name="value">目标数据的具体值</param>
+        /// <param name="key">The key used to set the target data.</param>
+        /// <param name="value">The value of the target data.</param>
         public void SetValue(string key, object value)
         {
             this.Items[key] = value;

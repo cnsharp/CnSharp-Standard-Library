@@ -4,70 +4,71 @@ using System.Text;
 
 namespace CnSharp.Security
 {
-	/// <summary>
-	/// 3DES 加密算法
-	/// </summary>
-	public static class TripleDES
-	{
+    /// <summary>
+    /// 3DES Encryption algorithm
+    /// </summary>
+    public static class TripleDES
+    {
+        #region Public Methods
 
-		#region Public Methods
-
-		/// <summary>
-		/// 3des解密字符串
-		/// </summary>
-		/// <param name="entryptText">密文</param>
-		/// <param name="encoding">编码方式</param>
-		/// <returns>解密后的字符串</returns>
-		/// <remarks>静态方法，指定编码方式</remarks>
-        public static string Decrypt3DES(string entryptText, string key, Encoding encoding = null)
-		{
-		    if (encoding == null)
-		        encoding = Encoding.UTF8;
-			var des = new TripleDESCryptoServiceProvider();
-			var hashMD5 = new MD5CryptoServiceProvider();
-
-			des.Key = hashMD5.ComputeHash(encoding.GetBytes(key));
-			des.Mode = CipherMode.ECB;
-
-			ICryptoTransform desDecrypt = des.CreateDecryptor();
-
-			string result = "";
-			try
-			{
-				byte[] buffer = Convert.FromBase64String(entryptText);
-				result = encoding.GetString(desDecrypt.TransformFinalBlock(buffer, 0, buffer.Length));
-			}
-			catch (Exception e)
-			{
-				throw (new Exception("Invalid Key or input string is not a valid base64 string", e));
-			}
-
-			return result;
-		}
-
-		/// <summary>
-		/// 3des加密字符串
-		/// </summary>
-		/// <param name="plainText">明文</param>
-		/// <param name="encoding">编码方式</param>
-		/// <returns>加密后并经base63编码的字符串</returns>
-		/// <remarks>重载，指定编码方式</remarks>
-		public static string Encrypt3DES(string plainText,string key, Encoding encoding = null)
-		{
+        /// <summary>
+        /// Decrypts a string using 3DES.
+        /// </summary>
+        /// <param name="encryptedText">The encrypted text (ciphertext).</param>
+        /// <param name="key">The secret key.</param>
+        /// <param name="encoding">The encoding method. Defaults to UTF8 if not specified.</param>
+        /// <returns>The decrypted string.</returns>
+        public static string Decrypt(string encryptedText, string key, Encoding encoding = null)
+        {
             if (encoding == null)
                 encoding = Encoding.UTF8;
-			var des = new TripleDESCryptoServiceProvider();
-			var hashMD5 = new MD5CryptoServiceProvider();
 
-			des.Key = hashMD5.ComputeHash(encoding.GetBytes(key));
-			des.Mode = CipherMode.ECB;
+            var des = new TripleDESCryptoServiceProvider();
+            var md5 = new MD5CryptoServiceProvider();
 
-			ICryptoTransform desEncrypt = des.CreateEncryptor();
+            des.Key = md5.ComputeHash(encoding.GetBytes(key));
+            des.Mode = CipherMode.ECB;
 
-			byte[] Buffer = encoding.GetBytes(plainText);
-			return Convert.ToBase64String(desEncrypt.TransformFinalBlock(Buffer, 0, Buffer.Length));
-		}
+            ICryptoTransform desDecrypt = des.CreateDecryptor();
 
-		#endregion
-	}
+            string result = "";
+            try
+            {
+                byte[] buffer = Convert.FromBase64String(encryptedText);
+                result = encoding.GetString(desDecrypt.TransformFinalBlock(buffer, 0, buffer.Length));
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Invalid Key or input string is not a valid base64 string", e);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Encrypts a string using 3DES.
+        /// </summary>
+        /// <param name="plainText">The plain text to encrypt.</param>
+        /// <param name="key">The secret key.</param>
+        /// <param name="encoding">The encoding method. Defaults to UTF8 if not specified.</param>
+        /// <returns>The encrypted string encoded in Base64.</returns>
+        public static string Encrypt(string plainText, string key, Encoding encoding = null)
+        {
+            if (encoding == null)
+                encoding = Encoding.UTF8;
+
+            var des = new TripleDESCryptoServiceProvider();
+            var md5 = new MD5CryptoServiceProvider();
+
+            des.Key = md5.ComputeHash(encoding.GetBytes(key));
+            des.Mode = CipherMode.ECB;
+
+            var desEncrypt = des.CreateEncryptor();
+
+            var buffer = encoding.GetBytes(plainText);
+            return Convert.ToBase64String(desEncrypt.TransformFinalBlock(buffer, 0, buffer.Length));
+        }
+
+        #endregion
+    }
 }

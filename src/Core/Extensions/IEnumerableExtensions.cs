@@ -4,17 +4,17 @@ using System.Collections.Generic;
 namespace CnSharp.Extensions
 {
     /// <summary>
-    /// IEnumerable 扩展方法集合
+    /// Collection of extension methods for IEnumerable
     /// </summary>
     public static class IEnumerableExtensions
     {
         /// <summary>
-        /// 对 data 的每个元素执行指定操作。
+        /// Executes the specified action on each element of the data.
         /// </summary>
-        /// <typeparam name="T">data 集合的元素类型</typeparam>
-        /// <param name="data">要进行迭代的元素集合。</param>
-        /// <param name="action">要对 data 的每个元素执行的 System.Actionlt;Tgt; 委托。</param>
-        /// <exception cref="System.ArgumentNullException">data</exception>
+        /// <typeparam name="T">The type of the elements in the data collection</typeparam>
+        /// <param name="data">The collection of elements to iterate over.</param>
+        /// <param name="action">The System.Action&lt;T&gt; delegate to perform on each element of the data.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when data is null</exception>
         public static void ForEach<T>(this IEnumerable<T> data, Action<T> action)
         {
             if (data == null)
@@ -27,12 +27,12 @@ namespace CnSharp.Extensions
         }
 
         /// <summary>
-        /// 对 data 的每个元素执行指定操作。
+        /// Executes the specified action on each element of the data.
         /// </summary>
-        /// <typeparam name="T">data 集合的元素类型</typeparam>
-        /// <param name="data">要进行迭代的元素集合。</param>
-        /// <param name="action">要对 data 的每个元素执行的 System.Actionlt;T, intgt; 委托。</param>
-        /// <exception cref="System.ArgumentNullException">data</exception>
+        /// <typeparam name="T">The type of the elements in the data collection</typeparam>
+        /// <param name="data">The collection of elements to iterate over.</param>
+        /// <param name="action">The System.Action&lt;T, int&gt; delegate to perform on each element of the data.</param>
+        /// <exception cref="System.ArgumentNullException">Thrown when data is null</exception>
         public static void ForEach<T>(this IEnumerable<T> data, Action<T, int> action)
         {
             if (data == null)

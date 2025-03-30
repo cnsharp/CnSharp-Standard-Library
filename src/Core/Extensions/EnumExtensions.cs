@@ -17,7 +17,8 @@ namespace CnSharp.Extensions
     {
         private static readonly IDictionary<Tuple<Enum, Type>, object[]> Cache = new Dictionary<Tuple<Enum, Type>, object[]>();
         private static readonly ReaderWriterLockSlim LockCache = new ReaderWriterLockSlim();
-
+        private static readonly Dictionary<Type, Dictionary<int, string>> DictKeyDescription = new Dictionary<Type, Dictionary<int, string>>();
+        
         /// <summary>
         /// 获得当前枚举实例的 <see cref="System.ComponentModel.DescriptionAttribute"/> 属性值.
         /// </summary>
@@ -96,7 +97,7 @@ namespace CnSharp.Extensions
         //    return dict.Copy();
         //}
 
-         private static readonly Dictionary<Type, Dictionary<int, string>> DictKeyDescription = new Dictionary<Type, Dictionary<int, string>>();
+        
          /// <summary>
          /// 枚举类型的枚举项与描述转为NameValue List（Name为描述 Value为枚举名）
          /// </summary>

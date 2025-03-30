@@ -4,6 +4,10 @@ namespace CnSharp.Extensions
 {
     public static class StringExtensions
     {
+        public static bool IsNullOrWhiteSpace(this string value)
+        {
+            return string.IsNullOrWhiteSpace(value);
+        }
       
         /// <summary>
         ///     SBC case string to DBC case string
@@ -69,16 +73,29 @@ namespace CnSharp.Extensions
         /// </summary>
         private const int Margin = 65248;
 
-        // 最大的有效半角英文字符转换成int型数据的值
+        /// <summary>
+        ///     The maximum valid half-width English character converted to an int value
+        /// </summary>
         private const int MaxDbcCaseToInt = 126;
 
+        /// <summary>
+        ///     The maximum valid full-width English character converted to an int value
+        /// </summary>
         private const int MaxSbcCaseToInt = 65374;
 
-        // 最小的有效半角英文字符转换成int型数据的值
+        /// <summary>
+        ///     The minimum valid half-width English character converted to an int value
+        /// </summary>
         private const int MinDbcCaseToInt = 33;
 
+        /// <summary>
+        ///     The minimum valid full-width English character converted to an int value
+        /// </summary>
         private const int MinSbcCaseToInt = 65281;
 
+        /// <summary>
+        ///     SBC blank
+        /// </summary>
         private const int SbcBlankToInt = 12288;
 
         #endregion

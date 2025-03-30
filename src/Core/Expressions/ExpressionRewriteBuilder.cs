@@ -6,13 +6,13 @@ using System.Reflection;
 
 namespace CnSharp.Expressions
 {
-    internal class ExpresionRewriteBuilder
+    internal class ExpressionRewriteBuilder
     {
         public Type SourceType { get; set; }
 
         public Type TargetType { get; set; }
 
-        public ExpresionRewriteBuilder(Type sourceType, Type targetType)
+        public ExpressionRewriteBuilder(Type sourceType, Type targetType)
         {
             SourceType = sourceType;
             TargetType = targetType;

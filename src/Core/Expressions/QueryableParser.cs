@@ -75,11 +75,11 @@ namespace CnSharp.Expressions
 
                 case "Single":
                 case "SingleOrDefault":
-                    throw new NotSupportedException("请使用 Count 和 First/FirstOrDefault 替换掉这个功能！");
+                    throw new NotSupportedException("Please use Count and First/FirstOrDefault instead of this functionality!");
 
                 case "Last":
                 case "LastOrDefault":
-                    throw new NotSupportedException("请使用 OrderByDescending 和 First/FirstOrDefault 替换掉这个功能！");
+                    throw new NotSupportedException("Please use OrderByDescending and First/FirstOrDefault instead of this functionality!");
 
                 case "Where":
                     {
@@ -106,7 +106,7 @@ namespace CnSharp.Expressions
 
                         var unaryExpression = methodCall.Arguments[1] as UnaryExpression;
 
-                        // 不支持带有索引的 Select 扩展方法
+                        // Does not support Select extension method with index
                         var method = typeof(Queryable).GetMethods().First(p => p.Name == methodName && p.GetParameters().Length == methodCall.Arguments.Count);
                         var expr = Converter(methodCall.Arguments[1]);
                         Attach(method, () => new Type[] { (expr as LambdaExpression).ReturnType }, expr);
@@ -137,7 +137,7 @@ namespace CnSharp.Expressions
                     break;
 
                 default:
-                    throw new NotSupportedException("OData 协议不支持 LINQ 扩展方法：" + methodName);
+                    throw new NotSupportedException("OData protocol does not support LINQ extension method: " + methodName);
             }
         }
     }

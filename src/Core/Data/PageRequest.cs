@@ -1,6 +1,6 @@
 ﻿namespace CnSharp.Data
 {
-    public abstract class BaseCriteria
+    public abstract class PageRequest
     {
         private int _pageIndex;
         private int _pageSize;

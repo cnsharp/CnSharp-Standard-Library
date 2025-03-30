@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace CnSharp.Extensions
 {
-    public static class MappingHelper
+    public static class MappingExtensions
     {
         public static void AssignTo(this object @from, object to, params string[] skips)
         {

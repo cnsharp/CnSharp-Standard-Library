@@ -10,45 +10,44 @@ namespace CnSharp.Serialization
 	/// </summary>
 	public static class XmlSerializationHelper
 	{
-		#region Public Methods
-
-	
 		/// <summary> 
 		/// serialize object to xml string
 		/// </summary> 
 		/// <param name="obj">object</param> 
 		/// <returns>XML string</returns> 
-		public static string ToXml<T>(this T obj)
+		public static string SerializeToXml<T>(T obj)
 		{
-			using (var ms = new MemoryStream())
-			using (var writer = new XmlTextWriter(ms, Encoding.UTF8))
+			using (var stream = new MemoryStream())
 			{
-				writer.Indentation = 3;
-				writer.IndentChar = ' ';
-				writer.Formatting = Formatting.Indented;
-				var sc = new XmlSerializer(obj.GetType());
-				sc.Serialize(writer, obj);
-				string xml = Encoding.UTF8.GetString(ms.ToArray());
-				int index = xml.IndexOf("?>");
-				if (index > 0)
+				using (var writer = new XmlTextWriter(stream, Encoding.UTF8))
 				{
-					xml = xml.Substring(index + 2);
+					writer.Indentation = 3;
+					writer.IndentChar = ' ';
+					writer.Formatting = Formatting.Indented;
+					new XmlSerializer(obj.GetType()).Serialize(writer, obj);
+					var xml = Encoding.UTF8.GetString(stream.ToArray());
+					var index = xml.IndexOf("?>");
+					if (index > 0)
+					{
+						xml = xml.Substring(index + 2);
+					}
+					return xml.Trim();
 				}
-				return xml.Trim();
 			}
 		}
 
-		/// <summary>
-		/// Deserialize object from xml file
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="filename">xml file name</param>
-		/// <returns></returns>
-		public static T LoadObjectFromXmlFile<T>(string filename)
+		/// <summary> 
+		/// serialize object to xml file
+		/// </summary> 
+		/// <param name="obj">object</param>
+		/// <param name="filePath">file name</param>
+		public static void SerializeToXmlFile<T>(T obj, string filePath)
 		{
-			var doc = new XmlDocument();
-			doc.Load(filename);
-            return LoadObjectFromXml<T>(doc.InnerXml);
+			using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
+			{
+				var serializer = new XmlSerializer(obj.GetType());
+				serializer.Serialize(writer, obj);
+			}
 		}
 
 		/// <summary>
@@ -57,15 +56,29 @@ namespace CnSharp.Serialization
 		/// <typeparam name="T"></typeparam>
 		/// <param name="xml">xml string</param>
 		/// <returns></returns>
-		public static T LoadObjectFromXml<T>(string xml)
+		public static T DeserializeFromXmlString<T>(string xml)
 		{
-			var serializer = new XmlSerializer(typeof(T));
-			using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
+			var serializer = new XmlSerializer(typeof (T));
+			using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
 			{
-				return (T)serializer.Deserialize(ms);
+				return (T) serializer.Deserialize(stream);
 			}
 		}
 
-		#endregion
+		/// <summary>
+		/// Deserialize object from xml file
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="filePath">xml file name</param>
+		/// <returns></returns>
+		public static T DeserializeFromXmlFile<T>(string filePath)
+		{
+			using (var reader = new StreamReader(filePath, Encoding.UTF8))
+			{
+				var serializer = new XmlSerializer(typeof (T));
+				return (T) serializer.Deserialize(reader);
+			}
+		}
+
 	}
 }

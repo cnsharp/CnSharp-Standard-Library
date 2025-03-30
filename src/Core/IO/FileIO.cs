@@ -8,8 +8,6 @@ namespace CnSharp.IO
 	/// </summary>
 	public static class FileIO
 	{
-		#region Public Methods
-
 		public static void CopyFiles(string sourceDirectory, string targetDirectory)
 		{
 			if (!Directory.Exists(sourceDirectory))
@@ -41,47 +39,46 @@ namespace CnSharp.IO
 		}
 
 		/// <summary>
-		/// 读文本
-		/// </summary>
-		/// <param name="path"></param>
-		/// <returns></returns>
+		 /// Read text
+		 /// </summary>
+		 /// <param name="path"></param>
+		 /// <returns></returns>
 		public static string ReadText(string path)
 		{
 			return ReadText(path, Encoding.UTF8);
 		}
 
 		/// <summary>
-		/// 读文本
-		/// </summary>
-		/// <param name="path"></param>
-		/// <param name="coding"></param>
-		/// <returns></returns>
-		public static string ReadText(string path, Encoding coding)
+		 /// Read text
+		 /// </summary>
+		 /// <param name="path"></param>
+		 /// <param name="encoding"></param>
+		 /// <returns></returns>
+		public static string ReadText(string path, Encoding encoding)
 		{
-			using (var sr = new StreamReader(path, coding)) return sr.ReadToEnd();
+			using (var sr = new StreamReader(path, encoding)) return sr.ReadToEnd();
 		}
 
 		/// <summary>
-		/// 写文件
-		/// </summary>
-		/// <param name="path"></param>
-		/// <param name="content"></param>
+		 /// Write file
+		 /// </summary>
+		 /// <param name="path"></param>
+		 /// <param name="content"></param>
 		public static void WriteText(string path, string content)
 		{
 			WriteText(path, content, Encoding.UTF8);
 		}
 
 		/// <summary>
-		/// 写文本
-		/// </summary>
-		/// <param name="path"></param>
-		/// <param name="content"></param>
-		/// <param name="coding"></param>
-		public static void WriteText(string path, string content, Encoding coding)
+		 /// Write text
+		 /// </summary>
+		 /// <param name="path"></param>
+		 /// <param name="content"></param>
+		 /// <param name="encoding"></param>
+		public static void WriteText(string path, string content, Encoding encoding)
 		{
-			using (var sw = new StreamWriter(path, false, coding)) sw.Write(content);
+			using (var sw = new StreamWriter(path, false, encoding)) sw.Write(content);
 		}
 
-		#endregion
 	}
 }

@@ -10,8 +10,6 @@ namespace CnSharp.Expressions
 
         public Type OriginalElementType { get; set; }
 
-        #region IQueryProvider 成员
-
         public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
         {
             if (expression == null)
@@ -51,6 +49,5 @@ namespace CnSharp.Expressions
             return parser.Value;
         }
 
-        #endregion IQueryProvider 成员
     }
 }

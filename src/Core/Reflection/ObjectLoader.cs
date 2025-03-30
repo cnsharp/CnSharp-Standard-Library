@@ -5,14 +5,14 @@ using System.Reflection;
 namespace CnSharp.Reflection
 {
     /// <summary>
-    ///     object loader from assembly by reflection
+    ///     Object loader from assembly by reflection
     /// </summary>
     public class ObjectLoader
     {
         /// <summary>
-        ///     从程序集生成对象
+        ///     Create an object from an assembly
         /// </summary>
-        /// <typeparam name="TObject">返回类型</typeparam>
+        /// <typeparam name="TObject">Return type</typeparam>
         /// <returns></returns>
         public static TObject CreateObject<TObject>() where TObject : class
         {
@@ -22,10 +22,10 @@ namespace CnSharp.Reflection
         }
 
         /// <summary>
-        ///     根据类型名称生成对象
+        ///     Create an object by type name
         /// </summary>
-        /// <typeparam name="TObject">类型</typeparam>
-        /// <param name="typeName">类型名称</param>
+        /// <typeparam name="TObject">Type</typeparam>
+        /// <param name="typeName">Type name</param>
         /// <returns></returns>
         public static TObject CreateObject<TObject>(string typeName) where TObject : class
         {
@@ -37,11 +37,11 @@ namespace CnSharp.Reflection
         }
 
         /// <summary>
-        ///     根据类型名称生成对象
+        ///     Create an object by type name
         /// </summary>
-        /// <typeparam name="TObject">类型</typeparam>
-        /// <param name="typeName">类型名称</param>
-        /// <param name="parameters">构造函数参数</param>
+        /// <typeparam name="TObject">Type</typeparam>
+        /// <param name="typeName">Type name</param>
+        /// <param name="parameters">Constructor parameters</param>
         /// <returns></returns>
         public static TObject CreateObject<TObject>(string typeName, params object[] parameters) where TObject : class
         {
@@ -56,11 +56,11 @@ namespace CnSharp.Reflection
         }
 
         /// <summary>
-        ///     从程序集生成对象
+        ///     Create an object from an assembly
         /// </summary>
-        /// <typeparam name="TObject">返回类型</typeparam>
-        /// <param name="typeName">反射类型名称</param>
-        /// <param name="assemblyName">程序集名称</param>
+        /// <typeparam name="TObject">Return type</typeparam>
+        /// <param name="typeName">Reflection type name</param>
+        /// <param name="assemblyName">Assembly name</param>
         /// <returns></returns>
         public static TObject CreateObject<TObject>(string typeName, string assemblyName) where TObject : class
         {
@@ -72,9 +72,9 @@ namespace CnSharp.Reflection
         }
 
         /// <summary>
-        ///     根据类型获得程序集
+        ///     Get assembly by type name
         /// </summary>
-        /// <param name="typeName">类型名称</param>
+        /// <param name="typeName">Type name</param>
         /// <returns></returns>
         public static Assembly GetAssemblyByType(string typeName)
         {
@@ -82,9 +82,9 @@ namespace CnSharp.Reflection
         }
 
         /// <summary>
-        ///     获得程序集
+        ///     Get assembly
         /// </summary>
-        /// <param name="assemblyName">程序集名称</param>
+        /// <param name="assemblyName">Assembly name</param>
         /// <returns></returns>
         public static Assembly GetAssembly(string assemblyName)
         {
@@ -110,10 +110,10 @@ namespace CnSharp.Reflection
         }
 
         /// <summary>
-        ///     获得一个类型
+        ///     Get a type
         /// </summary>
-        /// <param name="typeName">类型名称</param>
-        /// <param name="assemblyName">类型所在程序集</param>
+        /// <param name="typeName">Type name</param>
+        /// <param name="assemblyName">Assembly containing the type</param>
         /// <returns></returns>
         public static Type GetType(string typeName, string assemblyName)
         {

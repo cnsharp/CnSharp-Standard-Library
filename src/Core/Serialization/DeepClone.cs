@@ -1,19 +1,19 @@
-﻿using System.IO;
+using System.IO;
 
 namespace CnSharp.Serialization
 {
     /// <summary>
-    /// 实例对象深层对象拷贝类
+    /// Class for deep cloning of objects
     /// </summary>
     public static class DeepClone
     {
         /// <summary>
-        /// 深层拷贝一个实例对象。
+        /// Deep clones an object instance.
         /// </summary>
-        /// <typeparam name="TObject">带序列化的目标类</typeparam>
-        /// <param name="obj">目标类的一个实例对象。</param>
-        /// <param name="serializationAction">深层拷贝对象的方式：<c>null</c> = 二进制拷贝方式（必须标记 Serializable 特性，或者实现 ISerializable 接口）。</param>
-        /// <returns>深层克隆的一个目标类的实例对象。</returns>
+        /// <typeparam name="TObject">The target class to be serialized</typeparam>
+        /// <param name="obj">An instance of the target class.</param>
+        /// <param name="serializationAction">Method for deep cloning the object: <c>null</c> = binary cloning (must be marked with Serializable attribute or implement ISerializable interface).</param>
+        /// <returns>A new instance of the target class obtained through deep cloning.</returns>
         public static TObject Copy<TObject>(this TObject obj, IObjectSerialization serializationAction = null) where TObject : class
         {
             if (ReferenceEquals(obj, null))
@@ -32,12 +32,12 @@ namespace CnSharp.Serialization
         }
 
         /// <summary>
-        /// 获取二进制序列化对象方式的一个实例对象。
+        /// Gets an instance of binary serialization method.
         /// </summary>
         public static IObjectSerialization Binary { get { return new BinarySerialization(); } }
 
         /// <summary>
-        /// 获取 XML 序列化对象方式的一个实例对象。
+        /// Gets an instance of XML serialization method.
         /// </summary>
         public static IObjectSerialization Xml { get { return new XmlSerialization(); } }
     }

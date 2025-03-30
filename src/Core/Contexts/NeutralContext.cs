@@ -9,7 +9,7 @@ namespace CnSharp.Contexts
     public class NeutralContext : ConcurrentDictionary<string, object>
     {
         /// <summary>
-        /// key of neutral context
+        /// Key of neutral context
         /// </summary>
         public const string NeutralContextKey = "CnSharp.Contexts.NeutralContext-Key";
         static readonly AsyncLocal<NeutralContext> AsyncLocalContexts = new AsyncLocal<NeutralContext>();
@@ -20,7 +20,7 @@ namespace CnSharp.Contexts
         }
 
         /// <summary>
-        /// singleton
+        /// Singleton
         /// </summary>
         public static NeutralContext Current
         {
@@ -32,7 +32,7 @@ namespace CnSharp.Contexts
         }
 
         /// <summary>
-        /// get a value from context by key
+        /// Get a value from context by key
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -47,7 +47,7 @@ namespace CnSharp.Contexts
         }
 
         /// <summary>
-        /// set a key-value pair to context
+        /// Set a key-value pair to context
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>

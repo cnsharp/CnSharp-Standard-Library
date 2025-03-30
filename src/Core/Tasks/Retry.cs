@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -6,19 +6,19 @@ using System.Threading;
 namespace CnSharp.Tasks
 {
     /// <summary>
-    /// 重试方法类
+    /// Retry method class
     /// </summary>
     public class Retry
     {
         #region Business Properties
 
         /// <summary>
-        /// 获取允许的重试次数。
+        /// Gets the allowed number of retries.
         /// </summary>
         public int RetryCount { get; private set; }
 
         /// <summary>
-        /// 在执行过程中发生异常后触发。
+        /// Triggered after an exception occurs during execution.
         /// </summary>
         public Action<ExceptionContinueInfomation> AfterException { get; set; }
 
@@ -27,10 +27,10 @@ namespace CnSharp.Tasks
         #region Entrance
 
         /// <summary>
-        /// 创建一个 <see cref="Retry"/> 类的实例对象。
+        /// Creates an instance of the <see cref="Retry"/> class.
         /// </summary>
-        /// <param name="count">允许发生错误的次数：缺省为 3 次。</param>
-        /// <returns>一个 <see cref="Retry"/> 类的实例对象。</returns>
+        /// <param name="count">The number of allowed errors: default is 3.</param>
+        /// <returns>An instance of the <see cref="Retry"/> class.</returns>
         public static Retry Create(int count = 3)
         {
             return new Retry { RetryCount = count };
@@ -45,10 +45,10 @@ namespace CnSharp.Tasks
         #region Business Methods
 
         /// <summary>
-        /// 在允许的重试次数内循环执行目标逻辑，直到执行成功。
+        /// Executes the target logic in a loop within the allowed number of retries until successful.
         /// </summary>
-        /// <param name="action">目标逻辑方法。</param>
-        /// <returns>执行目标逻辑过程中发生的异常信息集合。</returns>
+        /// <param name="action">The target logic method.</param>
+        /// <returns>A collection of exceptions that occurred during the execution of the target logic.</returns>
         public Exception[] Execute(Action action)
         {
             var dic = new Dictionary<int, Exception>();
@@ -92,34 +92,34 @@ namespace CnSharp.Tasks
         #region Inner Class
 
         /// <summary>
-        /// 重试异常信息类
+        /// Retry exception information class
         /// </summary>
         public class RetryException : Exception
         {
             /// <summary>
-            /// 执行目标逻辑过程中发生的异常信息集合。
+            /// A collection of exceptions that occurred during the execution of the target logic.
             /// </summary>
             public IList<Exception> InnerExceptions { get; private set; }
 
             internal RetryException(IEnumerable<Exception> exceptions)
-                : base("系统发生了重试异常！", exceptions == null ? null : exceptions.FirstOrDefault())
+                : base("A retry exception occurred in the system!", exceptions == null ? null : exceptions.FirstOrDefault())
             {
                 InnerExceptions = exceptions == null ? new List<Exception>() : exceptions.ToList();
             }
         }
 
         /// <summary>
-        /// 异常重试信息
+        /// Exception retry information
         /// </summary>
         public class ExceptionContinueInfomation
         {
             /// <summary>
-            /// 获取发生的异常信息。
+            /// Gets the exception information that occurred.
             /// </summary>
             public Exception Exception { get; private set; }
 
             /// <summary>
-            /// 获取或设置
+            /// Gets or sets whether to continue.
             /// </summary>
             public bool Continue { get; set; }
 
@@ -134,16 +134,16 @@ namespace CnSharp.Tasks
     }
 
     /// <summary>
-    /// 重试方法类扩展方法集合
+    /// Extension methods for the retry method class
     /// </summary>
     public static class RetryExtensions
     {
         /// <summary>
-        /// 在重试的过程中发生了异常后睡眠一段时间。
+        /// Sleeps for a specified duration after an exception occurs during the retry process.
         /// </summary>
-        /// <param name="retry">一个 <see cref="Retry"/> 类的实例对象。</param>
-        /// <param name="timeout">睡眠的时长。</param>
-        /// <returns>一个 <see cref="Retry"/> 类的实例对象。</returns>
+        /// <param name="retry">An instance of the <see cref="Retry"/> class.</param>
+        /// <param name="timeout">The duration to sleep.</param>
+        /// <returns>An instance of the <see cref="Retry"/> class.</returns>
         public static Retry SleepAfterException(this Retry retry, TimeSpan timeout)
         {
             retry.AfterException += p => Thread.Sleep(timeout);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -6,7 +6,7 @@ using System.Text;
 namespace CnSharp.Security
 {
     /// <summary>
-    /// RSA 加密算法帮助类
+    /// RSA encryption algorithm helper class
     /// </summary>
     public sealed class RsaHelper
     {
@@ -21,7 +21,7 @@ namespace CnSharp.Security
         #region Business Properties
 
         /// <summary>
-        /// 获取 RSA 加解密过程中用到的密钥。
+        /// Gets the RSA key used in the encryption and decryption process.
         /// </summary>
         public string Key { get; private set; }
 
@@ -30,16 +30,13 @@ namespace CnSharp.Security
         #region Entrance
 
         /// <summary>
-        /// 初始化新建一个 <see cref="RsaHelper"/> 类的实例对象。
+        /// Initializes a new instance of the <see cref="RsaHelper"/> class.
         /// </summary>
-        /// <param name="key">RSA 加解密过程中用到的密钥。</param>
-        /// <exception cref="System.ArgumentNullException">[RsaHelper].[ctor].key</exception>
+        /// <param name="key">RSA key used in the encryption and decryption process.</param>
+        /// <exception cref="System.ArgumentNullException">key</exception>
         public RsaHelper(string key)
         {
-            if (key == null)
-                throw new ArgumentNullException("[RsaHelper].[ctor].key");
-
-            Key = key;
+            Key = key ?? throw new ArgumentNullException(nameof(key));
             _provider = new RSACryptoServiceProvider();
             _provider.FromXmlString(key);
             _maxEncryptBlockSize = _provider.KeySize / 8 - 11;
@@ -51,10 +48,10 @@ namespace CnSharp.Security
         #region Business Methods
 
         /// <summary>
-        /// 使用 RSA 加密算法加密数据。
+        /// Encrypts data using the RSA encryption algorithm.
         /// </summary>
-        /// <param name="source">待加密的原始数据。</param>
-        /// <returns>RSA 加密后的数据。</returns>
+        /// <param name="source">The original data to be encrypted.</param>
+        /// <returns>Data encrypted by RSA.</returns>
         public string Encrypt(string source)
         {
             var data = Encoding.Unicode.GetBytes(source);
@@ -83,10 +80,10 @@ namespace CnSharp.Security
         }
 
         /// <summary>
-        /// 使用 RSA 加密算法解密数据。
+        /// Decrypts data using the RSA encryption algorithm.
         /// </summary>
-        /// <param name="source">待解密的数据。</param>
-        /// <returns>解密后的原始数据。</returns>
+        /// <param name="source">Data to be decrypted.</param>
+        /// <returns>The original data after decryption.</returns>
         public string Decrypt(string source)
         {
             var data = Convert.FromBase64String(source);
@@ -115,7 +112,7 @@ namespace CnSharp.Security
         }
 
         /// <summary>
-        /// 创建一个新的 RSA 算法加密和解密过程中用到的密钥。
+        /// Creates a new RSA key used in the encryption and decryption process.
         /// </summary>
         /// <returns></returns>
         public static RsaKey CreateNewKey()

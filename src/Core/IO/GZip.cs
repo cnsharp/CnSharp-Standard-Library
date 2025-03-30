@@ -97,10 +97,8 @@ namespace CnSharp.IO
                         result.TempFileDeleted = true;
                     }
                 }
-                catch (Exception ex4)
+                catch (Exception ignored)
                 {
-                    // handle or display the error 
-                    throw ex4;
                 }
             }
 
@@ -119,59 +117,47 @@ namespace CnSharp.IO
             result.TempFile = lpTempFile;
             result.ZipFile = zipFile;
 
-            string line;
-            string lpFilePath;
-            GZippedFile gzf;
-            FileStream fsTemp = null;
-            var gzfs = new ArrayList();
+            var files = new ArrayList();
 
             // extract the files from the temp file
-            try
-            {
-                fsTemp = UnzipToTempFile(zipFile, lpTempFile, result);
-                if (fsTemp != null)
-                    while (fsTemp.Position != fsTemp.Length)
-                    {
-                        line = null;
-                        while (string.IsNullOrEmpty(line) && fsTemp.Position != fsTemp.Length) line = ReadLine(fsTemp);
 
-                        if (!string.IsNullOrEmpty(line))
+            using (var fsTemp = UnzipToTempFile(zipFile, lpTempFile, result))
+            {
+                while (fsTemp.Position != fsTemp.Length)
+                {
+                    string line = null;
+                    while (string.IsNullOrEmpty(line) && fsTemp.Position != fsTemp.Length) line = ReadLine(fsTemp);
+
+                    if (!string.IsNullOrEmpty(line))
+                    {
+                        var gzf = GZippedFile.GetGZippedFile(line);
+                        if (gzf != null && gzf.Length > 0)
                         {
-                            gzf = GZippedFile.GetGZippedFile(line);
-                            if (gzf != null && gzf.Length > 0)
-                            {
-                                gzfs.Add(gzf);
-                                lpFilePath = destFolder + gzf.RelativePath;
-                                gzf.LocalPath = lpFilePath;
-                                WriteFile(fsTemp, gzf.Length, lpFilePath);
-                                gzf.Restored = true;
-                            }
+                            files.Add(gzf);
+                            var lpFilePath = destFolder + gzf.RelativePath;
+                            gzf.LocalPath = lpFilePath;
+                            WriteFile(fsTemp, gzf.Length, lpFilePath);
+                            gzf.Restored = true;
                         }
                     }
-            }
-            finally
-            {
-                if (fsTemp != null) fsTemp.Close();
-            }
-
-            // delete the temp file
-            try
-            {
-                if (deleteTempFile)
-                {
-                    File.Delete(lpTempFile);
-                    result.TempFileDeleted = true;
                 }
+                
+                // delete the temp file
+                try
+                {
+                    if (deleteTempFile)
+                    {
+                        File.Delete(lpTempFile);
+                        result.TempFileDeleted = true;
+                    }
+                }
+                catch (Exception ignored)
+                {
+                }
+                result.FileCount = files.Count;
+                files.CopyTo(result.Files);
+                return result;
             }
-            catch (Exception ex4)
-            {
-                // handle or display the error 
-                throw ex4;
-            }
-
-            result.FileCount = gzfs.Count;
-            gzfs.CopyTo(result.Files);
-            return result;
         }
 
         #endregion
@@ -180,150 +166,77 @@ namespace CnSharp.IO
 
         private static void CreateTempFile(FileInfo[] files, string lpBaseFolder, string lpTempFile, GZipResult result)
         {
-            byte[] buffer;
-            var count = 0;
-            byte[] header;
-            string fileHeader;
-            string fileModDate;
-            string lpFolder = null;
-            var fileIndex = 0;
-            string lpSourceFile;
-            string vpSourceFile;
-            GZippedFile gzf = null;
-            FileStream fsOut = null;
-            FileStream fsIn = null;
-
-            if (files != null && files.Length > 0)
-                try
+            if (files == null || files.Length <= 0) return;
+            result.Files = new GZippedFile[files.Length];
+            // open the temp file for writing
+            using (var fsOut = new FileStream(lpTempFile, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                var fileIndex = 0;
+                foreach (var fi in files)
                 {
-                    result.Files = new GZippedFile[files.Length];
+                    var gzf = new GZippedFile();
+                    gzf.Index = fileIndex;
 
-                    // open the temp file for writing
-                    fsOut = new FileStream(lpTempFile, FileMode.Create, FileAccess.Write, FileShare.None);
+                    // read the source file, get its virtual path within the source folder
+                    var lpSourceFile = fi.FullName;
+                    gzf.LocalPath = lpSourceFile;
+                    var vpSourceFile = lpSourceFile.Replace(lpBaseFolder, string.Empty);
+                    vpSourceFile = vpSourceFile.Replace("\\", "/");
+                    gzf.RelativePath = vpSourceFile;
 
-                    foreach (var fi in files)
+                    using (var fsIn = new FileStream(lpSourceFile, FileMode.Open, FileAccess.Read,
+                               FileShare.Read))
                     {
-                        lpFolder = fi.DirectoryName + "\\";
-                        try
-                        {
-                            gzf = new GZippedFile();
-                            gzf.Index = fileIndex;
+                        var buffer = new byte[fsIn.Length];
+                        fsIn.Read(buffer, 0, buffer.Length);
+                        var fileModDate = fi.LastWriteTimeUtc.ToString();
+                        gzf.ModifiedDate = fi.LastWriteTimeUtc;
+                        gzf.Length = buffer.Length;
 
-                            // read the source file, get its virtual path within the source folder
-                            lpSourceFile = fi.FullName;
-                            gzf.LocalPath = lpSourceFile;
-                            vpSourceFile = lpSourceFile.Replace(lpBaseFolder, string.Empty);
-                            vpSourceFile = vpSourceFile.Replace("\\", "/");
-                            gzf.RelativePath = vpSourceFile;
-
-                            fsIn = new FileStream(lpSourceFile, FileMode.Open, FileAccess.Read, FileShare.Read);
-                            buffer = new byte[fsIn.Length];
-                            count = fsIn.Read(buffer, 0, buffer.Length);
-                            fsIn.Close();
-                            fsIn = null;
-
-                            fileModDate = fi.LastWriteTimeUtc.ToString();
-                            gzf.ModifiedDate = fi.LastWriteTimeUtc;
-                            gzf.Length = buffer.Length;
-
-                            fileHeader = fileIndex + "," + vpSourceFile + "," + fileModDate + "," + buffer.Length
+                        var fileHeader = fileIndex + "," + vpSourceFile + "," + fileModDate + "," +
+                                         buffer.Length
                                          + "\n";
-                            header = Encoding.Default.GetBytes(fileHeader);
+                        var header = Encoding.Default.GetBytes(fileHeader);
 
-                            fsOut.Write(header, 0, header.Length);
-                            fsOut.Write(buffer, 0, buffer.Length);
-                            fsOut.WriteByte(10); // linefeed
+                        fsOut.Write(header, 0, header.Length);
+                        fsOut.Write(buffer, 0, buffer.Length);
+                        fsOut.WriteByte(10); // linefeed
 
-                            gzf.AddedToTempFile = true;
+                        gzf.AddedToTempFile = true;
 
-                            // update the result object
-                            result.Files[fileIndex] = gzf;
-
-                            // increment the fileIndex
-                            fileIndex++;
-                        }
-                        catch (Exception ex1)
-                        {
-                            // handle or display the error 
-                            throw ex1;
-                        }
-                        finally
-                        {
-                            if (fsIn != null)
-                            {
-                                fsIn.Close();
-                                fsIn = null;
-                            }
-                        }
-
-                        if (fsOut != null) result.TempFileSize = fsOut.Length;
+                        // update the result object
+                        result.Files[fileIndex] = gzf;
                     }
-                }
-                catch (Exception ex2)
-                {
-                    // handle or display the error 
-                    throw ex2;
-                }
-                finally
-                {
-                    if (fsOut != null)
-                    {
-                        fsOut.Close();
-                    }
-                }
+                    
+                    // increment the fileIndex
+                    fileIndex++;
 
-            result.FileCount = fileIndex;
+                    result.TempFileSize = fsOut.Length;
+                }
+                
+                result.FileCount = fileIndex;
+            }
         }
 
         private static void CreateZipFile(string lpSourceFile, string lpZipFile, GZipResult result)
         {
-            byte[] buffer;
-            var count = 0;
-            FileStream fsOut = null;
-            FileStream fsIn = null;
-            GZipStream gzip = null;
-
             // compress the file into the zip file
-            try
+
+            using (var fsOut = new FileStream(lpZipFile, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                fsOut = new FileStream(lpZipFile, FileMode.Create, FileAccess.Write, FileShare.None);
-                gzip = new GZipStream(fsOut, CompressionMode.Compress, true);
-
-                fsIn = new FileStream(lpSourceFile, FileMode.Open, FileAccess.Read, FileShare.Read);
-                buffer = new byte[fsIn.Length];
-                count = fsIn.Read(buffer, 0, buffer.Length);
-                fsIn.Close();
-                fsIn = null;
-
-                // compress to the zip file
-                gzip.Write(buffer, 0, buffer.Length);
-
-                result.ZipFileSize = fsOut.Length;
-                result.CompressionPercent = GetCompressionPercent(result.TempFileSize, result.ZipFileSize);
-            }
-            catch (Exception ex1)
-            {
-                // handle or display the error 
-                throw ex1;
-            }
-            finally
-            {
-                if (gzip != null)
+                using (var gzip = new GZipStream(fsOut, CompressionMode.Compress, true))
                 {
-                    gzip.Close();
-                    gzip = null;
-                }
+                    using (var fsIn = new FileStream(lpSourceFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        var buffer = new byte[fsIn.Length];
+                        fsIn.Read(buffer, 0, buffer.Length);
 
-                if (fsOut != null)
-                {
-                    fsOut.Close();
-                    fsOut = null;
-                }
+                        // compress to the zip file
+                        gzip.Write(buffer, 0, buffer.Length);
 
-                if (fsIn != null)
-                {
-                    fsIn.Close();
-                    fsIn = null;
+                        result.ZipFileSize = fsOut.Length;
+                        result.CompressionPercent = GetCompressionPercent(result.TempFileSize, result.ZipFileSize);
+                    }
                 }
             }
         }
@@ -332,32 +245,20 @@ namespace CnSharp.IO
         {
             double tmp = tempLen;
             double zip = zipLen;
-            double hundred = 100;
-
+            const double hundred = 100;
             var ratio = (tmp - zip) / tmp;
-            var pcnt = ratio * hundred;
-
-            return (int) pcnt;
+            var percent = ratio * hundred;
+            return (int) percent;
         }
 
-        private static string GetFolder(string filename)
-        {
-            var vpFolder = filename;
-            var index = filename.LastIndexOf("/");
-            if (index != -1) vpFolder = filename.Substring(0, index + 1);
-            return vpFolder;
-        }
 
         private static string ReadLine(FileStream fs)
         {
-            var line = string.Empty;
-
             const int bufferSize = 4096;
             var buffer = new byte[bufferSize];
             byte b = 0;
             byte lf = 10;
             var i = 0;
-
             while (b != lf)
             {
                 b = (byte) fs.ReadByte();
@@ -365,92 +266,47 @@ namespace CnSharp.IO
                 i++;
             }
 
-            line = Encoding.Default.GetString(buffer, 0, i - 1);
-
-            return line;
+            return Encoding.Default.GetString(buffer, 0, i - 1);
         }
 
         private static FileStream UnzipToTempFile(string lpZipFile, string lpTempFile, GZipResult result)
         {
-            FileStream fsIn = null;
-            GZipStream gzip = null;
-            FileStream fsOut = null;
-            FileStream fsTemp = null;
-
-            const int bufferSize = 4096;
-            var buffer = new byte[bufferSize];
-            var count = 0;
-
-            try
+            using (var fsIn = new FileStream(lpZipFile, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                fsIn = new FileStream(lpZipFile, FileMode.Open, FileAccess.Read, FileShare.Read);
                 result.ZipFileSize = fsIn.Length;
 
-                fsOut = new FileStream(lpTempFile, FileMode.Create, FileAccess.Write, FileShare.None);
-                gzip = new GZipStream(fsIn, CompressionMode.Decompress, true);
-                while (true)
+                using (var fsOut = new FileStream(lpTempFile, FileMode.Create, FileAccess.Write, FileShare.None))
+                using (var gzip = new GZipStream(fsIn, CompressionMode.Decompress, true))
                 {
-                    count = gzip.Read(buffer, 0, bufferSize);
-                    if (count != 0) fsOut.Write(buffer, 0, count);
-                    if (count != bufferSize) break;
+                    while (true)
+                    {
+                        const int bufferSize = 4096;
+                        var buffer = new byte[bufferSize];
+                        var count = gzip.Read(buffer, 0, bufferSize);
+                        if (count != 0) fsOut.Write(buffer, 0, count);
+                        if (count != bufferSize) break;
+                    }
                 }
+
+                var fsTemp = new FileStream(lpTempFile, FileMode.Open, FileAccess.Read, FileShare.None);
+                result.TempFileSize = fsTemp.Length;
+                return fsTemp;
             }
-            //catch (Exception ex1)
-            //{
-            //    // handle or display the error 
-            //    throw ex1;
-            //}
-            finally
-            {
-                if (gzip != null)
-                {
-                    gzip.Close();
-                }
-
-                if (fsOut != null)
-                {
-                    fsOut.Close();
-                }
-
-                if (fsIn != null)
-                {
-                    fsIn.Close();
-                }
-            }
-
-            fsTemp = new FileStream(lpTempFile, FileMode.Open, FileAccess.Read, FileShare.None);
-            result.TempFileSize = fsTemp.Length;
-            return fsTemp;
         }
 
         private static void WriteFile(FileStream fs, int fileLength, string lpFile)
         {
-            FileStream fsFile = null;
+            var lpFolder = Path.GetDirectoryName(lpFile);
+            if (!string.IsNullOrEmpty(lpFolder) && lpFolder != lpFile && !Directory.Exists(lpFolder))
+                Directory.CreateDirectory(lpFolder);
 
-            try
+            var buffer = new byte[fileLength];
+            var count = fs.Read(buffer, 0, fileLength);
+            using (var fsFile = new FileStream(lpFile, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                var lpFolder = GetFolder(lpFile);
-                if (!string.IsNullOrEmpty(lpFolder) && lpFolder != lpFile && !Directory.Exists(lpFolder))
-                    Directory.CreateDirectory(lpFolder);
-
-                var buffer = new byte[fileLength];
-                var count = fs.Read(buffer, 0, fileLength);
-                fsFile = new FileStream(lpFile, FileMode.Create, FileAccess.Write, FileShare.None);
                 fsFile.Write(buffer, 0, buffer.Length);
                 fsFile.Write(buffer, 0, count);
-            }
-            catch (Exception ex2)
-            {
-                // handle or display the error 
-                throw ex2;
-            }
-            finally
-            {
-                if (fsFile != null)
-                {
-                    fsFile.Flush();
-                    fsFile.Close();
-                }
+                fsFile.Flush();
             }
         }
 
